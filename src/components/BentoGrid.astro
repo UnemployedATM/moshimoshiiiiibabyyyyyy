@@ -1,0 +1,311 @@
+---
+// BentoGrid.astro — Bento portfolio with flippable client cards
+// CV data from Pablo_J_Michel_CV_2026.docx on each card's back face
+---
+
+<div class="hero" aria-hidden="false">
+  <div class="bento-grid">
+
+    <!-- ================================================ -->
+    <!-- AGENTS — Kaiba Digital (AI System Design)        -->
+    <!-- ================================================ -->
+    <div class="bento-card search-card flip-card" data-flip>
+      <div class="flip-inner">
+        <div class="flip-front agents-front">
+          <span class="flip-hint" aria-hidden="true"></span>
+          <div class="tab-label">AGENTS</div>
+        </div>
+        <div class="flip-back">
+          <button class="flip-close" aria-label="Flip back">&larr;</button>
+          <div class="back-content">
+            <span class="back-badge agents-accent">2023 &ndash; Present</span>
+            <h3 class="back-company">Kaiba Digital</h3>
+            <p class="back-role">AI System Designer</p>
+            <span class="back-meta">Mexico</span>
+            <div class="back-divider"></div>
+            <p class="back-desc">AI-assisted production pipelines, brand systems, and content workflows. Local LLM deployments and automation tooling for creative teams.</p>
+            <div class="back-tags">
+              <span class="back-tag">Ollama</span>
+              <span class="back-tag">n8n</span>
+              <span class="back-tag">Open WebUI</span>
+              <span class="back-tag">Prompt Eng.</span>
+              <span class="back-tag">LLM Pipelines</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- BRAND — Kaiba Digital (Graphic Design / Brand)   -->
+    <!-- ================================================ -->
+    <div class="bento-card portfolios-card flip-card" data-flip>
+      <div class="flip-inner">
+        <div class="flip-front brand-front">
+          <span class="flip-hint" aria-hidden="true"></span>
+          <div class="tab-label">BRAND</div>
+        </div>
+        <div class="flip-back">
+          <button class="flip-close" aria-label="Flip back">&larr;</button>
+          <div class="back-content compact">
+            <span class="back-badge brand-accent">2023 &ndash; Present</span>
+            <h3 class="back-company">Kaiba Digital</h3>
+            <p class="back-role">Graphic Designer</p>
+            <span class="back-meta">Mexico</span>
+            <div class="back-tags">
+              <span class="back-tag">Figma</span>
+              <span class="back-tag">Brand Identity</span>
+              <span class="back-tag">Design Systems</span>
+              <span class="back-tag">Social Content</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- design is my passion — Sound & Creative          -->
+    <!-- ================================================ -->
+    <div class="bento-card guild-card flip-card" data-flip>
+      <div class="flip-inner">
+        <div class="flip-front design-front">
+          <span class="flip-hint" aria-hidden="true"></span>
+          <div class="tab-label is-comic">design is my passion</div>
+        </div>
+        <div class="flip-back">
+          <button class="flip-close" aria-label="Flip back">&larr;</button>
+          <div class="back-content compact">
+            <h3 class="back-company">Sound &amp; Creative</h3>
+            <div class="client-list">
+              <div class="client-entry" style="border-left-color: #00D287;">
+                <div class="entry-info">
+                  <strong>Dai Blue</strong>
+                  <span class="entry-meta">Composer &amp; Sound Designer</span>
+                  <span class="entry-meta">2023 &ndash; Present &middot; MX / CN / CO</span>
+                </div>
+                <span class="entry-status active" style="border-color: #00D287; background: #00D287;"></span>
+              </div>
+              <div class="client-entry" style="border-left-color: #00D287;">
+                <div class="entry-info">
+                  <strong>Radio Ibero</strong>
+                  <span class="entry-meta">Sound Design</span>
+                  <span class="entry-meta">2023 &middot; Mexico</span>
+                </div>
+                <span class="entry-status" style="border-color: #aaa;"></span>
+              </div>
+              <div class="client-entry" style="border-left-color: #00D287;">
+                <div class="entry-info">
+                  <strong>Dai Blue</strong>
+                  <span class="entry-meta">2D Compositor</span>
+                  <span class="entry-meta">2023 &middot; MX / CN / CO</span>
+                </div>
+                <span class="entry-status" style="border-color: #aaa;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- /Pablo Michel — TITLE (no flip)                  -->
+    <!-- ================================================ -->
+    <div class="bento-card uipedia-card interactive-card flex-center">
+      <h1 class="logo-title"><span>/P</span>ablo <span class="serif">Michel</span></h1>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- EDITOR — Video Editing Clients                   -->
+    <!-- ================================================ -->
+    <div class="bento-card dashboard-card flip-card" data-flip>
+      <div class="flip-inner">
+        <div class="flip-front editor-front">
+          <span class="flip-hint" aria-hidden="true"></span>
+          <div class="tab-label">EDITOR</div>
+        </div>
+        <div class="flip-back">
+          <button class="flip-close" aria-label="Flip back">&larr;</button>
+          <div class="back-content compact">
+            <h3 class="back-company">Video Editing</h3>
+            <div class="client-list tight">
+              <div class="client-entry" style="border-left-color: #00B4DB;">
+                <div class="entry-info">
+                  <strong>Ozone Media</strong>
+                  <span class="entry-meta">2024 &ndash; Present &middot; Remote</span>
+                </div>
+                <span class="entry-status active" style="border-color: #00B4DB; background: #00B4DB;"></span>
+              </div>
+              <div class="client-entry" style="border-left-color: #00B4DB;">
+                <div class="entry-info">
+                  <strong>QuillCut Media</strong>
+                  <span class="entry-meta">2024 &ndash; Present &middot; Remote</span>
+                </div>
+                <span class="entry-status active" style="border-color: #00B4DB; background: #00B4DB;"></span>
+              </div>
+              <div class="client-entry" style="border-left-color: #00B4DB;">
+                <div class="entry-info">
+                  <strong>Dai Blue</strong>
+                  <span class="entry-meta">2023 &ndash; Present &middot; MX / CN / CO</span>
+                </div>
+                <span class="entry-status active" style="border-color: #00B4DB; background: #00B4DB;"></span>
+              </div>
+              <div class="client-entry" style="border-left-color: #ccc;">
+                <div class="entry-info">
+                  <strong>WekaSuwi</strong>
+                  <span class="entry-meta">2023 &ndash; 2024</span>
+                </div>
+                <span class="entry-status" style="border-color: #ccc;"></span>
+              </div>
+              <div class="client-entry" style="border-left-color: #ccc;">
+                <div class="entry-info">
+                  <strong>Kjar Crew</strong>
+                  <span class="entry-meta">2022 &ndash; 2024</span>
+                </div>
+                <span class="entry-status" style="border-color: #ccc;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- LET'S TALK — Contact                             -->
+    <!-- ================================================ -->
+    <div class="bento-card resources-card flip-card" data-flip>
+      <div class="flip-inner">
+        <div class="flip-front contact-front">
+          <span class="flip-hint" aria-hidden="true"></span>
+          <div class="tab-label">LET'S TALK</div>
+        </div>
+        <div class="flip-back">
+          <button class="flip-close" aria-label="Flip back">&larr;</button>
+          <div class="back-content compact centered">
+            <a href="https://pablomichelmr.myportfolio.com" target="_blank" rel="noopener noreferrer" class="contact-link">pablomichelmr.myportfolio.com</a>
+            <a href="mailto:pablomichelmr@gmail.com" class="contact-link">pablomichelmr<wbr>@gmail.com</a>
+            <a href="tel:+5214431311173" class="contact-link subtle">+52 1 443 131 1173</a>
+            <span class="back-meta">Mexico</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- Subtitle — Education & Languages                 -->
+    <!-- ================================================ -->
+    <div class="bento-card gradient-card flip-card" data-flip>
+      <div class="flip-inner">
+        <div class="flip-front subtitle-front">
+          <span class="flip-hint" aria-hidden="true"></span>
+          <h2 class="subtitle">Interfaces, &amp; the intelligence within.</h2>
+        </div>
+        <div class="flip-back">
+          <button class="flip-close" aria-label="Flip back">&larr;</button>
+          <div class="back-content row-layout">
+            <div class="back-section">
+              <h3 class="back-company">Education</h3>
+              <p class="back-role">B.A. Film Production</p>
+              <span class="back-meta">CAAV &middot; 2018 &ndash; 2021 &middot; Mexico</span>
+            </div>
+            <div class="back-section-divider"></div>
+            <div class="back-section">
+              <h3 class="back-company">Languages</h3>
+              <div class="lang-row">
+                <div class="lang-item">
+                  <span class="lang-label">Spanish</span>
+                  <span class="lang-level">Native</span>
+                </div>
+                <div class="lang-item">
+                  <span class="lang-label">English</span>
+                  <span class="lang-level">C1 Fluent</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- Bio — Skills                                     -->
+    <!-- ================================================ -->
+    <div class="bento-card explore-card flip-card" data-flip>
+      <div class="flip-inner">
+        <div class="flip-front bio-front">
+          <span class="flip-hint" aria-hidden="true"></span>
+          <div class="bio-text">
+            <p><strong>Post-production generalist</strong> and <strong>creative technologist</strong>.</p>
+            <p>Working with LATAM and international clients across long-form, short-form vertical, branded, and live workflows.</p>
+            <p class="italic">Editing, color, sound, motion, and AI-assisted workflows.</p>
+          </div>
+        </div>
+        <div class="flip-back">
+          <button class="flip-close" aria-label="Flip back">&larr;</button>
+          <div class="back-content">
+            <h3 class="back-company">Skills</h3>
+            <div class="skills-grid">
+              <div class="skill-group">
+                <h4 class="skill-cat">Editing &amp; Color</h4>
+                <p class="skill-tools">Premiere Pro &middot; DaVinci Resolve &middot; CapCut &middot; Final Cut</p>
+              </div>
+              <div class="skill-group">
+                <h4 class="skill-cat">Motion &amp; Compositing</h4>
+                <p class="skill-tools">After Effects &middot; Illustrator &middot; Cinema 4D &middot; Blender &middot; Clip Studio</p>
+              </div>
+              <div class="skill-group">
+                <h4 class="skill-cat">Sound &amp; Music</h4>
+                <p class="skill-tools">Studio One &middot; Ableton &middot; Cubase &middot; Audition</p>
+              </div>
+              <div class="skill-group">
+                <h4 class="skill-cat">AI &amp; Automation</h4>
+                <p class="skill-tools">Ollama &middot; n8n &middot; Open WebUI &middot; LLM Pipelines</p>
+              </div>
+              <div class="skill-group">
+                <h4 class="skill-cat">Design &amp; Branding</h4>
+                <p class="skill-tools">Figma &middot; Brand Identity &middot; Design Tokens</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Flip-card interaction: click to flip, only one open at a time,
+  // Escape to close, links pass through without flipping.
+
+  const flipCards = document.querySelectorAll<HTMLElement>('.flip-card');
+
+  flipCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+
+      // Let real links work without flipping
+      if (target.closest('a')) return;
+
+      // Close button — unflip this card only
+      if (target.closest('.flip-close')) {
+        card.classList.remove('is-flipped');
+        return;
+      }
+
+      // Unflip every other card first
+      flipCards.forEach(c => {
+        if (c !== card) c.classList.remove('is-flipped');
+      });
+
+      // Toggle this card
+      card.classList.toggle('is-flipped');
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      flipCards.forEach(c => c.classList.remove('is-flipped'));
+    }
+  });
+</script>
+

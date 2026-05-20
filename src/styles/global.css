@@ -1,0 +1,640 @@
+/* ============================================================
+   Fonts — drop matching files into /public/fonts/ and uncomment
+   ============================================================ */
+
+/*
+@font-face {
+  font-family: 'Avenir Next';
+  src: url('/fonts/AvenirNext-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avenir Next';
+  src: url('/fonts/AvenirNext-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avenir Next';
+  src: url('/fonts/AvenirNext-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Big Caslon';
+  src: url('/fonts/BigCaslon-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+/* ============================================================
+   Reset
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  color: #fff;
+  font-family: 'Avenir Next', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ============================================================
+   Stage — fixed 3508:2481 aspect, scales to viewport
+   ============================================================ */
+
+.stage {
+  position: relative;
+  aspect-ratio: 3508 / 2481;
+  width: min(100vw, calc(100vh * 3508 / 2481));
+  height: auto;
+  margin: auto;
+  background: #000;
+  overflow: hidden;
+  container-type: inline-size;
+  font-size: 1cqw;
+}
+
+/* ============================================================
+   Hero (bio block)
+   ============================================================ */
+
+.hero {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================================
+   Interactive Bento Cards
+   ============================================================ */
+
+.interactive-card {
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 1.5cqw 4cqw rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.interactive-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.interactive-card:hover::after {
+  opacity: 1;
+}
+
+.interactive-card > * {
+  transition: transform 0.3s ease-out;
+}
+.interactive-card:hover > * {
+  transform: scale(1.03);
+}
+
+/* ============================================================
+   Bento Grid Layout
+   ============================================================ */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  grid-template-rows: 3fr 4fr 3fr;
+  gap: 1.5cqw;
+  width: 100%;
+  height: 100%;
+  padding: 3cqw;
+  box-sizing: border-box;
+}
+
+.search-card     { grid-column: 1 / 4;   grid-row: 1 / 3; }
+.portfolios-card { grid-column: 1 / 4;   grid-row: 3 / 4; }
+.guild-card      { grid-column: 4 / 8;   grid-row: 1 / 2; }
+.uipedia-card    { grid-column: 4 / 10;  grid-row: 2 / 3; }
+.dashboard-card  { grid-column: 4 / 8;   grid-row: 3 / 4; }
+.resources-card  { grid-column: 8 / 10;  grid-row: 3 / 4; }
+.gradient-card   { grid-column: 8 / 14;  grid-row: 1 / 2; }
+.explore-card    { grid-column: 10 / 14; grid-row: 2 / 4; }
+
+/* ============================================================
+   Bento Cards — base
+   ============================================================ */
+
+.bento-card {
+  border-radius: 1.5cqw;
+  position: relative;
+  color: #fff;
+}
+
+.bento-card:not(.flip-card) {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* ============================================================
+   Flip Card — 3D mechanics
+   ============================================================ */
+
+.flip-card {
+  perspective: 120cqw;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.flip-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.is-flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-front,
+.flip-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 1.5cqw;
+  overflow: hidden;
+}
+
+/* ============================================================
+   Front face
+   ============================================================ */
+
+.flip-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.agents-front   { background: #C89BFF; color: #111; }
+.brand-front    { background: #FF4B2B; color: #fff; }
+.design-front   { background: #00D287; color: #111; }
+.editor-front   { background: #00B4DB; color: #111; }
+.contact-front  { background: #FFC107; color: #111; }
+.subtitle-front { background: #FF007F; color: #fff; }
+.bio-front      { background: #2B2B3C; color: #fff; align-items: stretch; }
+
+.flip-card:not(.is-flipped):hover .flip-front {
+  filter: brightness(1.1);
+  box-shadow: 0 1.4cqw 4.5cqw rgba(0, 0, 0, 0.55);
+}
+
+.flip-card:not(.is-flipped):hover .tab-label {
+  transform: scale(1.08);
+}
+
+.flip-hint {
+  position: absolute;
+  bottom: 0.8cqw;
+  right: 0.8cqw;
+  width: 0.55cqw;
+  height: 0.55cqw;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.2;
+  transition: opacity 0.3s;
+}
+
+.flip-card:not(.is-flipped):hover .flip-hint {
+  opacity: 0.6;
+}
+
+/* ============================================================
+   Front face — content elements
+   ============================================================ */
+
+.tab-label {
+  font-weight: 700;
+  font-family: 'Avenir Next', system-ui, sans-serif;
+  font-size: 2.5cqw;
+  letter-spacing: 0.05em;
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tab-label.is-comic {
+  font-family: 'Comic Sans MS', 'Comic Neue', 'Marker Felt', cursive;
+  font-size: 1.8cqw;
+  font-weight: 400;
+}
+
+.subtitle {
+  font-family: 'Avenir Next', sans-serif;
+  font-weight: 400;
+  font-size: 2.2cqw;
+  max-width: 80%;
+}
+
+.bio-text {
+  padding: 2.5cqw;
+  text-align: left;
+}
+
+.bio-text p {
+  font-size: 1.4cqw;
+  line-height: 1.5;
+  margin-bottom: 1.2cqw;
+  color: #ddd;
+}
+
+.bio-text .italic {
+  font-style: italic;
+  color: #aaa;
+}
+
+/* ============================================================
+   Back face — warm cream (screenshot reference)
+   ============================================================ */
+
+.flip-back {
+  transform: rotateY(180deg);
+  background: #F5EFE6;
+  color: #2A2A2A;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.25);
+  font-family: 'Avenir Next', system-ui, sans-serif;
+}
+
+.back-content {
+  padding: 2cqw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.back-content.compact { padding: 1.4cqw; }
+
+.back-content.centered {
+  align-items: center;
+  justify-content: center;
+}
+
+.back-content.row-layout {
+  flex-direction: row;
+  align-items: center;
+  gap: 2cqw;
+}
+
+.back-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.25cqw 0.85cqw;
+  border-radius: 10cqw;
+  font-size: 0.8cqw;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.6cqw;
+}
+
+.agents-accent { background: #C89BFF; color: #1a1a2e; }
+.brand-accent  { background: #FF4B2B; color: #fff; }
+
+.back-company {
+  font-size: 1.8cqw;
+  font-weight: 700;
+  margin-bottom: 0.2cqw;
+  line-height: 1.2;
+  color: #1A1A1A;
+}
+
+.compact .back-company { font-size: 1.35cqw; }
+
+.back-role {
+  font-size: 1.05cqw;
+  color: #666;
+  margin-bottom: 0.2cqw;
+}
+
+.compact .back-role { font-size: 0.9cqw; }
+
+.back-meta {
+  font-size: 0.85cqw;
+  color: #999;
+  margin-bottom: 0.4cqw;
+  display: block;
+}
+
+.back-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 0.7cqw 0;
+  flex-shrink: 0;
+}
+
+.compact .back-divider { margin: 0.4cqw 0; }
+
+.back-desc {
+  font-size: 1cqw;
+  line-height: 1.55;
+  color: #555;
+  margin-bottom: 0.7cqw;
+}
+
+.back-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3cqw;
+  margin-top: auto;
+}
+
+.back-tag {
+  padding: 0.2cqw 0.6cqw;
+  border-radius: 0.4cqw;
+  font-size: 0.72cqw;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.06);
+  color: #555;
+}
+
+/* ============================================================
+   Client list — flight-entry style
+   ============================================================ */
+
+.client-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45cqw;
+  margin-top: 0.5cqw;
+  flex: 1;
+  min-height: 0;
+}
+
+.client-list.tight { gap: 0.3cqw; }
+
+.client-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5cqw;
+  padding: 0.45cqw 0.65cqw;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 0.6cqw;
+  border-left: 0.3cqw solid #ccc;
+  flex-shrink: 0;
+}
+
+.entry-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-info strong {
+  font-size: 0.9cqw;
+  display: block;
+  color: #2A2A2A;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tight .entry-info strong { font-size: 0.8cqw; }
+
+.entry-meta {
+  font-size: 0.7cqw;
+  color: #999;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tight .entry-meta { font-size: 0.65cqw; }
+
+.entry-status {
+  width: 1cqw;
+  height: 1cqw;
+  border-radius: 50%;
+  border: 0.18cqw solid #ccc;
+  flex-shrink: 0;
+  background: transparent;
+}
+
+/* ============================================================
+   Contact card back
+   ============================================================ */
+
+.contact-link {
+  display: block;
+  font-size: 0.85cqw;
+  font-weight: 600;
+  color: #2A2A2A;
+  text-decoration: none;
+  margin-bottom: 0.25cqw;
+  transition: color 0.2s;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.contact-link:hover { color: #FF4B2B; }
+
+.contact-link.subtle {
+  font-weight: 400;
+  font-size: 0.8cqw;
+  color: #666;
+}
+
+.contact-link.subtle:hover { color: #333; }
+
+/* ============================================================
+   Education / Languages — row layout
+   ============================================================ */
+
+.back-section { flex: 1; }
+
+.back-section-divider {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+}
+
+.lang-row {
+  display: flex;
+  gap: 1.5cqw;
+  margin-top: 0.4cqw;
+}
+
+.lang-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.lang-label {
+  font-size: 1cqw;
+  font-weight: 600;
+  color: #2A2A2A;
+}
+
+.lang-level {
+  font-size: 0.85cqw;
+  color: #888;
+}
+
+/* ============================================================
+   Skills grid (bio back)
+   ============================================================ */
+
+.skills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9cqw;
+  margin-top: 0.6cqw;
+}
+
+.skill-group {
+  border-left: 0.25cqw solid rgba(0, 0, 0, 0.1);
+  padding-left: 0.7cqw;
+}
+
+.skill-cat {
+  font-size: 0.9cqw;
+  font-weight: 700;
+  margin-bottom: 0.1cqw;
+  color: #333;
+}
+
+.skill-tools {
+  font-size: 0.8cqw;
+  color: #777;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   Static card — title (no flip)
+   ============================================================ */
+
+.uipedia-card { background: #1A1A24; }
+
+.logo-title {
+  font-family: 'Avenir Next', sans-serif;
+  font-size: 5cqw;
+  font-weight: 700;
+  margin: 0;
+}
+
+.logo-title span { color: #8b75ff; }
+
+.logo-title .serif {
+  font-family: 'Big Caslon', serif;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* ============================================================
+   Flip close / back button
+   ============================================================ */
+
+.flip-close {
+  position: absolute;
+  top: 0.5cqw;
+  right: 0.5cqw;
+  width: 1.8cqw;
+  height: 1.8cqw;
+  display: grid;
+  place-items: center;
+  font-size: 1cqw;
+  line-height: 1;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50%;
+  color: #aaa;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+  font-family: inherit;
+}
+
+.flip-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+/* ============================================================
+   Accessibility — reduced motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive-card,
+  .interactive-card::after,
+  .interactive-card > * {
+    transition: none !important;
+    transform: none !important;
+  }
+  .flip-inner {
+    transition: none;
+  }
+}
