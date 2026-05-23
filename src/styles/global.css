@@ -928,17 +928,24 @@ button {
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  /* Wide blocks */
-  .uipedia-card { grid-column: 1 / -1; min-height: 35vw; } /* /Pablo Michel */
-  .gradient-card { grid-column: 1 / -1; min-height: 45vw; } /* Interfaces & Intelligence */
-  .explore-card { grid-column: 1 / -1; min-height: 125vw; } /* Bio text - Taller for bigger font */
-  .resources-card { grid-column: 1 / -1; min-height: 50vw; } /* 3D Head */
+  /* Mobile Grid Arrangement & Sizing */
+  /* Row 1: Full width */
+  .uipedia-card { order: 1; grid-column: 1 / -1; min-height: 35vw; } /* /Pablo Michel */
+  
+  /* Row 2: Half blocks side by side */
+  .explore-card { order: 2; grid-column: 1 / 2; min-height: 130vw; } /* Bio text */
+  .resources-card { order: 3; grid-column: 2 / 3; min-height: 130vw; } /* 3D Head */
 
-  /* Square blocks */
-  .dashboard-card { grid-column: 1 / 2; } /* EDITOR */
-  .guild-card { grid-column: 2 / 3; } /* design */
-  .portfolios-card { grid-column: 1 / 2; } /* BRIEFS */
-  .search-card { grid-column: 2 / 3; } /* AGENTS */
+  /* Row 3: Half blocks side by side */
+  .dashboard-card { order: 4; grid-column: 1 / 2; } /* EDITOR */
+  .guild-card { order: 5; grid-column: 2 / 3; } /* design */
+
+  /* Row 4: Full width */
+  .gradient-card { order: 6; grid-column: 1 / -1; min-height: 45vw; } /* Interfaces & Intelligence */
+
+  /* Row 5: Half blocks side by side */
+  .portfolios-card { order: 7; grid-column: 1 / 2; } /* BRIEFS */
+  .search-card { order: 8; grid-column: 2 / 3; } /* AGENTS */
 
   /* Accordion Dropdown Effect: when tapped, take full width and expand height */
   .bento-card.expanded {
@@ -949,7 +956,7 @@ button {
 
   /* Scale up critical text for mobile */
   .bio-text p {
-    font-size: 6.5vw;
+    font-size: 5.5vw;
     margin-bottom: 4vw;
     line-height: 1.4;
   }
