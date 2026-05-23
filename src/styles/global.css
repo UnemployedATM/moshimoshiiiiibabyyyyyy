@@ -931,7 +931,7 @@ button {
   /* Wide blocks */
   .uipedia-card { grid-column: 1 / -1; min-height: 35vw; } /* /Pablo Michel */
   .gradient-card { grid-column: 1 / -1; min-height: 45vw; } /* Interfaces & Intelligence */
-  .explore-card { grid-column: 1 / -1; min-height: 90vw; } /* Bio text */
+  .explore-card { grid-column: 1 / -1; min-height: 125vw; } /* Bio text - Taller for bigger font */
   .resources-card { grid-column: 1 / -1; min-height: 50vw; } /* 3D Head */
 
   /* Square blocks */
@@ -943,14 +943,15 @@ button {
   /* Accordion Dropdown Effect: when tapped, take full width and expand height */
   .bento-card.expanded {
     grid-column: 1 / -1 !important;
-    min-height: 120vw !important;
+    min-height: 140vw !important; /* Give extra room for back content when open */
     z-index: 20;
   }
 
   /* Scale up critical text for mobile */
   .bio-text p {
-    font-size: 5vw;
-    margin-bottom: 3vw;
+    font-size: 6.5vw;
+    margin-bottom: 4vw;
+    line-height: 1.4;
   }
 
   .subtitle { font-size: 5vw; }
