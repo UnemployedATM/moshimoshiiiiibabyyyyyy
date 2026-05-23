@@ -77,9 +77,8 @@ button {
 
 .stage {
   position: relative;
-  aspect-ratio: 3508 / 2481;
-  width: min(100vw, calc(100vh * 3508 / 2481));
-  height: auto;
+  width: 100vw;
+  height: 100vh;
   margin: auto;
   background: #000;
   overflow: hidden;
@@ -109,7 +108,7 @@ button {
 
 .interactive-card {
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
-              box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -136,10 +135,11 @@ button {
   opacity: 1;
 }
 
-.interactive-card > * {
+.interactive-card>* {
   transition: transform 0.3s ease-out;
 }
-.interactive-card:hover > * {
+
+.interactive-card:hover>* {
   transform: scale(1.03);
 }
 
@@ -156,16 +156,85 @@ button {
   height: 100%;
   padding: 3cqw;
   box-sizing: border-box;
+  transition: grid-template-columns 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    grid-template-rows 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.search-card     { grid-column: 1 / 4;   grid-row: 1 / 3; }
-.portfolios-card { grid-column: 1 / 4;   grid-row: 3 / 4; }
-.guild-card      { grid-column: 4 / 8;   grid-row: 1 / 2; }
-.uipedia-card    { grid-column: 4 / 10;  grid-row: 2 / 3; }
-.dashboard-card  { grid-column: 4 / 8;   grid-row: 3 / 4; }
-.resources-card  { grid-column: 8 / 10;  grid-row: 3 / 4; }
-.gradient-card   { grid-column: 8 / 14;  grid-row: 1 / 2; }
-.explore-card    { grid-column: 10 / 14; grid-row: 2 / 4; }
+/* Expanded Grid States */
+.bento-grid.expand-dashboard {
+  grid-template-columns: repeat(3, 3.5fr) repeat(10, 1fr);
+  grid-template-rows: 3.5fr 4.5fr 1.5fr;
+}
+
+.bento-grid.expand-portfolios {
+  grid-template-columns: repeat(3, 1.6fr) repeat(10, 1fr);
+  grid-template-rows: 2fr 3.5fr 4fr;
+}
+
+.bento-grid.expand-guild {
+  grid-template-columns: repeat(3, 1fr) repeat(4, 2.8fr) repeat(6, 1fr);
+  grid-template-rows: 5fr 2.5fr 2fr;
+}
+
+.bento-grid.expand-search {
+  grid-template-columns: repeat(3, 1fr) repeat(4, 2.8fr) repeat(6, 1fr);
+  grid-template-rows: 2fr 2.5fr 5fr;
+}
+
+.bento-grid.expand-resources {
+  grid-template-columns: repeat(7, 1fr) repeat(2, 2.5fr) repeat(4, 1fr);
+  grid-template-rows: 2.5fr 2.5fr 5fr;
+}
+
+.bento-grid.expand-gradient {
+  grid-template-columns: repeat(7, 1fr) repeat(6, 2fr);
+  grid-template-rows: 4.5fr 2.5fr 2.5fr;
+}
+
+.bento-grid.expand-explore {
+  grid-template-columns: repeat(9, 1fr) repeat(4, 1.8fr);
+  grid-template-rows: 2.5fr 3.5fr 3.5fr;
+}
+
+.search-card {
+  grid-column: 4 / 8;
+  grid-row: 3 / 4;
+}
+
+.portfolios-card {
+  grid-column: 1 / 4;
+  grid-row: 3 / 4;
+}
+
+.guild-card {
+  grid-column: 4 / 8;
+  grid-row: 1 / 2;
+}
+
+.uipedia-card {
+  grid-column: 4 / 10;
+  grid-row: 2 / 3;
+}
+
+.dashboard-card {
+  grid-column: 1 / 4;
+  grid-row: 1 / 3;
+}
+
+.resources-card {
+  grid-column: 8 / 10;
+  grid-row: 3 / 4;
+}
+
+.gradient-card {
+  grid-column: 8 / 14;
+  grid-row: 1 / 2;
+}
+
+.explore-card {
+  grid-column: 10 / 14;
+  grid-row: 2 / 4;
+}
 
 /* ============================================================
    Bento Cards — base
@@ -177,7 +246,7 @@ button {
   color: #fff;
 }
 
-.bento-card:not(.flip-card) {
+.bento-card:not(.expand-card) {
   background: #111;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.4);
@@ -193,33 +262,24 @@ button {
 }
 
 /* ============================================================
-   Flip Card — 3D mechanics
+   Expand Card Mechanics
    ============================================================ */
 
-.flip-card {
-  perspective: 120cqw;
+.expand-card {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
-.flip-inner {
+.card-inner {
   width: 100%;
   height: 100%;
   position: relative;
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
 }
 
-.flip-card.is-flipped .flip-inner {
-  transform: rotateY(180deg);
-}
-
-.flip-front,
-.flip-back {
+.card-front,
+.card-back {
   position: absolute;
   inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   border-radius: 1.5cqw;
   overflow: hidden;
 }
@@ -228,7 +288,7 @@ button {
    Front face
    ============================================================ */
 
-.flip-front {
+.card-front {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -236,27 +296,61 @@ button {
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.4);
-  transition: box-shadow 0.3s ease, filter 0.3s ease;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  z-index: 2;
 }
 
-.agents-front   { background: #C89BFF; color: #111; }
-.brand-front    { background: #FF4B2B; color: #fff; }
-.design-front   { background: #00D287; color: #111; }
-.editor-front   { background: #00B4DB; color: #111; }
-.contact-front  { background: #FFC107; color: #111; }
-.subtitle-front { background: #FF007F; color: #fff; }
-.bio-front      { background: #2B2B3C; color: #fff; align-items: stretch; }
+.expand-card.is-expanded .card-front {
+  opacity: 0;
+  pointer-events: none;
+}
 
-.flip-card:not(.is-flipped):hover .flip-front {
+.agents-front {
+  background: #C89BFF;
+  color: #111;
+}
+
+.brand-front {
+  background: #FF4B2B;
+  color: #fff;
+}
+
+.design-front {
+  background: #00D287;
+  color: #111;
+}
+
+.editor-front {
+  background: #00B4DB;
+  color: #111;
+}
+
+.contact-front {
+  background: #FFC107;
+  color: #111;
+}
+
+.subtitle-front {
+  background: #FF007F;
+  color: #fff;
+}
+
+.bio-front {
+  background: #2B2B3C;
+  color: #fff;
+  align-items: stretch;
+}
+
+.expand-card:not(.is-expanded):hover .card-front {
   filter: brightness(1.1);
   box-shadow: 0 1.4cqw 4.5cqw rgba(0, 0, 0, 0.55);
 }
 
-.flip-card:not(.is-flipped):hover .tab-label {
+.expand-card:not(.is-expanded):hover .tab-label {
   transform: scale(1.08);
 }
 
-.flip-hint {
+.expand-hint {
   position: absolute;
   bottom: 0.8cqw;
   right: 0.8cqw;
@@ -268,7 +362,7 @@ button {
   transition: opacity 0.3s;
 }
 
-.flip-card:not(.is-flipped):hover .flip-hint {
+.expand-card:not(.is-expanded):hover .expand-hint {
   opacity: 0.6;
 }
 
@@ -282,6 +376,7 @@ button {
   font-size: 2.5cqw;
   letter-spacing: 0.05em;
   z-index: 2;
+  white-space: nowrap;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -304,9 +399,9 @@ button {
 }
 
 .bio-text p {
-  font-size: 1.4cqw;
-  line-height: 1.5;
-  margin-bottom: 1.2cqw;
+  font-size: 1.5cqw;
+  line-height: 1.4;
+  margin-bottom: 1.1cqw;
   color: #ddd;
 }
 
@@ -319,24 +414,47 @@ button {
    Back face — warm cream (screenshot reference)
    ============================================================ */
 
-.flip-back {
-  transform: rotateY(180deg);
-  background: #F5EFE6;
-  color: #2A2A2A;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.25);
+.card-back {
+  background: #2B2B3C;
+  color: #fcfcfc;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2cqw 8cqw rgba(0, 0, 0, 0.4);
   font-family: 'Avenir Next', system-ui, sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  container-type: inline-size;
+}
+
+.expand-card.is-expanded .card-back {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .back-content {
-  padding: 2cqw;
+  padding: 6cqw;
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.back-content.compact { padding: 1.4cqw; }
+.back-content.split-layout {
+  flex-direction: row;
+  gap: 6cqw;
+}
+
+.split-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.back-content.compact {
+  padding: 7cqw;
+}
 
 .back-content.centered {
   align-items: center;
@@ -346,80 +464,125 @@ button {
 .back-content.row-layout {
   flex-direction: row;
   align-items: center;
-  gap: 2cqw;
+  gap: 4cqw;
 }
 
 .back-badge {
   display: inline-block;
   align-self: flex-start;
-  padding: 0.25cqw 0.85cqw;
+  padding: 0.8cqw 2.5cqw;
   border-radius: 10cqw;
-  font-size: 0.8cqw;
+  font-size: 2.2cqw;
   font-weight: 600;
   letter-spacing: 0.02em;
-  margin-bottom: 0.6cqw;
+  margin-bottom: 2cqw;
 }
 
-.agents-accent { background: #C89BFF; color: #1a1a2e; }
-.brand-accent  { background: #FF4B2B; color: #fff; }
+.compact .back-badge {
+  padding: 1.2cqw 3.5cqw;
+  font-size: 3.2cqw;
+  margin-bottom: 3.5cqw;
+}
+
+.agents-accent {
+  background: #C89BFF;
+  color: #1a1a2e;
+}
+
+.brand-accent {
+  background: #FF4B2B;
+  color: #fff;
+}
 
 .back-company {
-  font-size: 1.8cqw;
+  font-size: 5.5cqw;
   font-weight: 700;
-  margin-bottom: 0.2cqw;
+  margin-bottom: 1cqw;
   line-height: 1.2;
-  color: #1A1A1A;
+  color: #ffffff;
 }
 
-.compact .back-company { font-size: 1.35cqw; }
+.compact .back-company {
+  font-size: 7.5cqw;
+  margin-bottom: 1.5cqw;
+}
 
 .back-role {
-  font-size: 1.05cqw;
-  color: #666;
-  margin-bottom: 0.2cqw;
+  font-size: 3cqw;
+  color: #b0b0b0;
+  margin-bottom: 1cqw;
 }
 
-.compact .back-role { font-size: 0.9cqw; }
+.compact .back-role {
+  font-size: 4.5cqw;
+  margin-bottom: 1.5cqw;
+}
 
 .back-meta {
-  font-size: 0.85cqw;
-  color: #999;
-  margin-bottom: 0.4cqw;
+  font-size: 2.5cqw;
+  color: #888888;
+  margin-bottom: 1.5cqw;
   display: block;
+}
+
+.compact .back-meta {
+  font-size: 3.8cqw;
+  margin-bottom: 3cqw;
 }
 
 .back-divider {
   width: 100%;
   height: 1px;
-  background: rgba(0, 0, 0, 0.08);
-  margin: 0.7cqw 0;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 2.5cqw 0;
   flex-shrink: 0;
 }
 
-.compact .back-divider { margin: 0.4cqw 0; }
+.compact .back-divider {
+  margin: 1.5cqw 0;
+}
 
 .back-desc {
-  font-size: 1cqw;
+  font-size: 2.8cqw;
   line-height: 1.55;
-  color: #555;
-  margin-bottom: 0.7cqw;
+  color: #cccccc;
+  margin-bottom: 2.5cqw;
 }
 
 .back-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3cqw;
+  gap: 1.2cqw;
   margin-top: auto;
 }
 
-.back-tag {
-  padding: 0.2cqw 0.6cqw;
-  border-radius: 0.4cqw;
-  font-size: 0.72cqw;
-  font-weight: 500;
-  background: rgba(0, 0, 0, 0.06);
-  color: #555;
+.compact .back-tags {
+  gap: 2cqw;
 }
+
+.back-tag {
+  padding: 0.6cqw 1.8cqw;
+  border-radius: 1cqw;
+  font-size: 2.2cqw;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  color: #eeeeee;
+}
+
+.compact .back-tag {
+  padding: 1cqw 3cqw;
+  font-size: 3.2cqw;
+  border-radius: 1.5cqw;
+}
+
+/* Wide-content modifier for wide grid slots */
+.wide-content .back-company { font-size: 4cqw; margin-bottom: 0.5cqw; }
+.wide-content .back-role { font-size: 2.2cqw; margin-bottom: 0.5cqw; }
+.wide-content .back-desc { font-size: 2cqw; margin-bottom: 1.5cqw; }
+.wide-content .back-badge { font-size: 1.5cqw; padding: 0.6cqw 2cqw; margin-bottom: 1.5cqw; }
+.wide-content .back-tag { font-size: 1.5cqw; padding: 0.6cqw 1.8cqw; }
+.wide-content .back-meta { font-size: 1.6cqw; margin-bottom: 1cqw; }
+.wide-content.split-layout { gap: 4cqw; }
 
 /* ============================================================
    Client list — flight-entry style
@@ -428,59 +591,94 @@ button {
 .client-list {
   display: flex;
   flex-direction: column;
-  gap: 0.45cqw;
-  margin-top: 0.5cqw;
+  gap: 1.2cqw;
+  margin-top: 1.5cqw;
   flex: 1;
   min-height: 0;
 }
 
-.client-list.tight { gap: 0.3cqw; }
+.client-list.tight {
+  gap: 1cqw;
+}
 
 .client-entry {
   display: flex;
+  /* Reverses DOM order so the status squarcle acts as a left-aligned icon! */
+  flex-direction: row-reverse;
+  justify-content: flex-end;
   align-items: center;
-  gap: 0.5cqw;
-  padding: 0.45cqw 0.65cqw;
-  background: rgba(0, 0, 0, 0.03);
-  border-radius: 0.6cqw;
-  border-left: 0.3cqw solid #ccc;
+  gap: 1.5cqw;
+  padding: 1.5cqw 1.8cqw;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 1.5cqw; /* Nested bento cubism */
+  border: 1px solid rgba(255, 255, 255, 0.04);
   flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  
+  /* Overriding the old inline left-border color trick */
+  border-left-width: 1px !important;
+  border-left-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+.client-entry:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: scale(1.02);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1cqw 2cqw rgba(0, 0, 0, 0.2);
 }
 
 .entry-info {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3cqw;
 }
 
 .entry-info strong {
-  font-size: 0.9cqw;
-  display: block;
-  color: #2A2A2A;
+  font-size: 2.8cqw;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.tight .entry-info strong { font-size: 0.8cqw; }
+.tight .entry-info strong {
+  font-size: 2.6cqw;
+}
 
 .entry-meta {
-  font-size: 0.7cqw;
-  color: #999;
-  display: block;
+  font-size: 2.2cqw;
+  color: #888888;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.tight .entry-meta { font-size: 0.65cqw; }
+.tight .entry-meta {
+  font-size: 2cqw;
+}
 
 .entry-status {
-  width: 1cqw;
-  height: 1cqw;
-  border-radius: 50%;
-  border: 0.18cqw solid #ccc;
+  width: 3.5cqw;
+  height: 3.5cqw;
+  border-radius: 1cqw; /* True cubist squarcle */
+  border: none !important; /* Removes the ugly thick border */
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0.5cqw 1cqw rgba(0, 0, 0, 0.3);
   flex-shrink: 0;
-  background: transparent;
+  transition: transform 0.3s ease;
+}
+
+.client-entry:hover .entry-status {
+  transform: scale(1.1);
+}
+
+.entry-status:not(.active) {
+  background: rgba(255, 255, 255, 0.05) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8) !important;
 }
 
 /* ============================================================
@@ -489,36 +687,42 @@ button {
 
 .contact-link {
   display: block;
-  font-size: 0.85cqw;
-  font-weight: 600;
-  color: #2A2A2A;
+  font-size: 3cqw;
+  color: #ffffff;
   text-decoration: none;
-  margin-bottom: 0.25cqw;
+  margin-bottom: 1.5cqw;
   transition: color 0.2s;
   overflow-wrap: break-word;
   word-break: break-word;
+  white-space: nowrap;
 }
 
-.contact-link:hover { color: #FF4B2B; }
+.contact-link:hover {
+  color: #FF4B2B;
+}
 
 .contact-link.subtle {
   font-weight: 400;
-  font-size: 0.8cqw;
-  color: #666;
+  font-size: 1.15cqw;
+  color: #aaaaaa;
 }
 
-.contact-link.subtle:hover { color: #333; }
+.contact-link.subtle:hover {
+  color: #ffffff;
+}
 
 /* ============================================================
    Education / Languages — row layout
    ============================================================ */
 
-.back-section { flex: 1; }
+.back-section {
+  flex: 1;
+}
 
 .back-section-divider {
   width: 1px;
   align-self: stretch;
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
 }
 
@@ -534,14 +738,14 @@ button {
 }
 
 .lang-label {
-  font-size: 1cqw;
+  font-size: 3.2cqw;
   font-weight: 600;
-  color: #2A2A2A;
+  color: #ffffff;
 }
 
 .lang-level {
-  font-size: 0.85cqw;
-  color: #888;
+  font-size: 2.8cqw;
+  color: #aaaaaa;
 }
 
 /* ============================================================
@@ -551,33 +755,89 @@ button {
 .skills-grid {
   display: flex;
   flex-direction: column;
-  gap: 0.9cqw;
-  margin-top: 0.6cqw;
+  gap: 3.5cqw;
+  margin-top: 1.5cqw;
 }
 
 .skill-group {
-  border-left: 0.25cqw solid rgba(0, 0, 0, 0.1);
-  padding-left: 0.7cqw;
+  border-left: 1.2cqw solid rgba(255, 255, 255, 0.15);
+  padding-left: 2.5cqw;
 }
 
 .skill-cat {
-  font-size: 0.9cqw;
+  font-size: 5cqw;
   font-weight: 700;
-  margin-bottom: 0.1cqw;
-  color: #333;
+  margin-bottom: 0.8cqw;
+  color: #ffffff;
 }
 
 .skill-tools {
-  font-size: 0.8cqw;
-  color: #777;
+  font-size: 3.5cqw;
+  color: #bbbbbb;
   line-height: 1.4;
+}
+
+.skill-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5cqw;
+  margin-top: 1cqw;
+}
+
+.skill-icon {
+  width: 5.5cqw;
+  height: 5.5cqw;
+  padding: 1.2cqw;
+  background: #ffffff;
+  border-radius: 1.2cqw;
+  object-fit: contain;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0.5cqw 1cqw rgba(0, 0, 0, 0.15);
+}
+
+.skill-icon:hover {
+  transform: scale(1.15) translateY(-2px);
+  box-shadow: 0 1cqw 2cqw rgba(0, 0, 0, 0.25);
+}
+
+.icon-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.icon-wrap::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  background: #111111;
+  color: #ffffff;
+  padding: 0.6cqw 1.2cqw;
+  border-radius: 0.8cqw;
+  font-size: 2cqw;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 1cqw 2cqw rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  font-family: 'Avenir Next', sans-serif;
+}
+
+.icon-wrap:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* ============================================================
    Static card — title (no flip)
    ============================================================ */
 
-.uipedia-card { background: #1A1A24; }
+.uipedia-card {
+  background: #1A1A24;
+}
 
 .logo-title {
   font-family: 'Avenir Next', sans-serif;
@@ -586,7 +846,9 @@ button {
   margin: 0;
 }
 
-.logo-title span { color: #8b75ff; }
+.logo-title span {
+  color: #8b75ff;
+}
 
 .logo-title .serif {
   font-family: 'Big Caslon', serif;
@@ -595,32 +857,32 @@ button {
 }
 
 /* ============================================================
-   Flip close / back button
+   Expand close / back button
    ============================================================ */
 
-.flip-close {
+.expand-close {
   position: absolute;
-  top: 0.5cqw;
-  right: 0.5cqw;
-  width: 1.8cqw;
-  height: 1.8cqw;
+  top: 1.5cqw;
+  right: 1.5cqw;
+  width: 6cqw;
+  height: 6cqw;
   display: grid;
   place-items: center;
-  font-size: 1cqw;
+  font-size: 3.5cqw;
   line-height: 1;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 50%;
-  color: #aaa;
+  color: #dddddd;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
   z-index: 10;
   font-family: inherit;
 }
 
-.flip-close:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: #333;
+.expand-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 /* ============================================================
@@ -628,13 +890,101 @@ button {
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
+
   .interactive-card,
   .interactive-card::after,
-  .interactive-card > * {
+  .interactive-card>* {
     transition: none !important;
     transform: none !important;
   }
-  .flip-inner {
-    transition: none;
+}
+
+/* ============================================================
+   Mobile Responsiveness
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .bento-grid {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 4cqw;
+    padding: 4cqw;
+    padding-bottom: 15cqw;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bento-card {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    min-height: 80cqw;
+    flex-shrink: 0;
+  }
+
+  .search-card {
+    min-height: 60cqw;
+  }
+
+  .portfolios-card {
+    min-height: 80cqw;
+  }
+
+  .guild-card {
+    min-height: 60cqw;
+  }
+
+  .dashboard-card {
+    min-height: 60cqw;
+  }
+
+  .resources-card {
+    min-height: 60cqw;
+  }
+
+  .gradient-card {
+    min-height: 50cqw;
+  }
+
+  .explore-card {
+    min-height: 100cqw;
+  }
+
+  /* Scale up critical text for mobile stacked view */
+  .bio-text p {
+    font-size: 3.5cqw;
+    margin-bottom: 2cqw;
+  }
+
+  .subtitle {
+    font-size: 4cqw;
+  }
+
+  .logo-title {
+    font-size: 8cqw;
+  }
+
+  .tab-label {
+    font-size: 3.5cqw;
+    letter-spacing: 0.1em;
+  }
+
+  .expand-close {
+    width: 10cqw;
+    height: 10cqw;
+    font-size: 6cqw;
+  }
+
+  .skill-icon {
+    width: 12cqw;
+    height: 12cqw;
+    padding: 2.5cqw;
+    border-radius: 2.5cqw;
+  }
+
+  .icon-wrap::after {
+    font-size: 3.5cqw;
+    padding: 1.5cqw 3cqw;
+    border-radius: 2cqw;
+    bottom: 110%;
   }
 }

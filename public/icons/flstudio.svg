@@ -1,0 +1,11 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" rx="20" fill="#FF4500" />
+  <!-- Body -->
+  <path d="M 33 60 C 25 35 40 30 50 35 C 50 35 70 40 70 50 C 70 65 50 85 40 85 C 30 85 30 75 33 60 Z" fill="#ffffff" />
+  <!-- Left Leaf -->
+  <path d="M 50 35 C 40 25 28 28 28 35 C 28 35 35 38 42 38 Z" fill="#ffffff" />
+  <!-- Right Leaf -->
+  <path d="M 50 35 C 55 25 72 28 72 35 C 72 35 65 38 58 38 Z" fill="#ffffff" />
+  <!-- Stem -->
+  <path d="M 45 38 C 55 20 65 15 65 15 C 60 20 52 28 48 34 Z" fill="#ffffff" />
+</svg>

@@ -1,0 +1,14 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- A smooth multi-stop gradient based on the image -->
+    <linearGradient id="agGrad" x1="0%" y1="100%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2196F3" />
+      <stop offset="30%" stop-color="#4CAF50" />
+      <stop offset="50%" stop-color="#FF9800" />
+      <stop offset="70%" stop-color="#F44336" />
+      <stop offset="100%" stop-color="#2196F3" />
+    </linearGradient>
+  </defs>
+  <!-- Bell curve with gradient stroke -->
+  <path d="M 15 85 C 30 20 40 15 50 15 C 60 15 70 20 85 85" stroke="url(#agGrad)" stroke-width="18" stroke-linecap="round" fill="none" />
+</svg>
