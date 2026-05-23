@@ -907,7 +907,7 @@ button {
   .bento-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 28vw;
+    grid-auto-rows: minmax(28vw, auto); /* Allows rows to stretch infinitely for expanded content */
     grid-auto-flow: dense;
     gap: 4vw;
     padding: 4vw;
@@ -957,11 +957,19 @@ button {
   .guild-card { order: 7; grid-column: span 1; grid-row: span 1; } /* Green (Design) */
   .gradient-card { order: 8; grid-column: span 2; grid-row: span 1; } /* Pink (Interfaces) */
 
-  /* Accordion Dropdown Effect: when tapped, take full width */
+  /* Accordion Dropdown Effect: when tapped, stretch dynamically to fit text! */
   .bento-card.expanded {
     grid-column: span 3 !important;
-    grid-row: span 4 !important; /* Make it very tall when open to fit content */
+    grid-row: span 1 !important; /* Spans 1 row, but stretches the row's auto height */
     z-index: 20;
+  }
+
+  /* Release the back content from absolute positioning so it physically pushes the parent height */
+  .bento-card.expanded .card-back {
+    position: relative !important;
+    height: auto !important;
+    width: 100%;
+    min-height: 80vw;
   }
 
   /* Scale up critical text for mobile */
