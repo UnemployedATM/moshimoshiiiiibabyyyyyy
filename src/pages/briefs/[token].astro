@@ -1,0 +1,88 @@
+---
+import { supabase } from '../../lib/supabase';
+
+const { token } = Astro.params;
+
+let client = null;
+
+try {
+  const { data, error } = await supabase
+    .from('Client')
+    .select('*')
+    .eq('token', token)
+    .single();
+    
+  if (data) {
+    client = data;
+  }
+} catch (error) {
+  console.error("Database error:", error);
+}
+
+if (!client) {
+  // Return a 404 response if token is invalid or DB fails
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found'
+  });
+}
+
+// Clean up HTML safely or trust the DB
+const rawHtml = client.briefHtml;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{client.name} - Brief</title>
+  <style>
+    body {
+      margin: 0; padding: 0; background: #0d0d12; color: #fff; font-family: 'Avenir Next', system-ui, sans-serif;
+      min-height: 100vh; display: flex; justify-content: center;
+    }
+    .brief-container {
+      width: 100%; max-width: 800px; padding: 40px 20px;
+    }
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+    }
+    .back-btn { color: #888; text-decoration: none; font-weight: 500; }
+    .back-btn:hover { color: #fff; }
+    
+    .print-btn {
+      background: #FF4B2B; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;
+    }
+    .print-btn:hover { filter: brightness(1.1); }
+    
+    .brief-content {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 40px; line-height: 1.6;
+    }
+
+    /* Beautiful PDF Print Styles */
+    @media print {
+      body { background: #fff; color: #000; }
+      .top-bar { display: none; }
+      .brief-content { 
+        background: transparent; border: none; padding: 0; margin: 0;
+      }
+      h1, h2, h3 { color: #000 !important; page-break-after: avoid; }
+      p { color: #333; }
+      @page { margin: 2cm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="brief-container">
+    
+    <div class="top-bar">
+      <a href="/" class="back-btn">&larr; Back to Portfolio</a>
+      <button class="print-btn" onclick="window.print()">Download as PDF</button>
+    </div>
+
+    <div class="brief-content" set:html={rawHtml}></div>
+
+  </div>
+</body>
+</html>

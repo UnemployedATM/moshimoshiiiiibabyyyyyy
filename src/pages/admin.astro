@@ -1,0 +1,150 @@
+---
+// src/pages/admin.astro
+import { supabase } from '../lib/supabase';
+
+// Simple password protection based on .env
+const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD;
+
+// Check cookies for authentication
+const authCookie = Astro.cookies.get('admin_auth')?.value;
+let isAuthenticated = authCookie === ADMIN_PASSWORD;
+
+// Handle login attempt
+if (Astro.request.method === 'POST') {
+  const data = await Astro.request.formData();
+  
+  if (data.has('password')) {
+    const password = data.get('password')?.toString();
+    if (password === ADMIN_PASSWORD) {
+      Astro.cookies.set('admin_auth', password, { path: '/' });
+      isAuthenticated = true;
+    } else {
+      return new Response('Unauthorized', { status: 401 });
+    }
+  }
+}
+
+// Fetch all clients if authenticated
+let clients = [];
+if (isAuthenticated) {
+  try {
+    const { data, error } = await supabase
+      .from('Client')
+      .select('*')
+      .order('created_at', { ascending: false });
+      
+    if (data) {
+      clients = data;
+    }
+  } catch (error) {
+    console.error("Database connection failed:", error);
+  }
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Briefs Admin Dashboard</title>
+  <style>
+    body {
+      margin: 0; padding: 0; background: #0d0d12; color: #fff; font-family: 'Avenir Next', sans-serif;
+    }
+    .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    input, textarea { width: 100%; padding: 12px; margin: 8px 0 16px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px; font-family: inherit; box-sizing: border-box; }
+    textarea { height: 200px; resize: vertical; }
+    button { padding: 12px 24px; background: #FF4B2B; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    button:hover { filter: brightness(1.1); }
+    .client-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .danger { background: #ff3333; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Briefs Admin</h1>
+
+    {!isAuthenticated ? (
+      <div class="card">
+        <h2>Login Required</h2>
+        <form method="POST">
+          <input type="password" name="password" placeholder="Enter Admin Password" required />
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    ) : (
+      <>
+        <div class="card">
+          <h2>Create New Client Brief</h2>
+          <form id="createClientForm">
+            <label>Client Name</label>
+            <input type="text" id="clientName" required placeholder="e.g. Ozone Media" />
+            
+            <label>Unique Token (Clients will type this to access)</label>
+            <input type="text" id="clientToken" required placeholder="e.g. ozone-2024" />
+            
+            <label>Brief Content (HTML)</label>
+            <textarea id="briefHtml" required placeholder="<h1>Project Overview</h1><p>...</p>"></textarea>
+            
+            <button type="submit">Save Client & Brief</button>
+          </form>
+          <div id="statusMsg" style="margin-top: 10px; color: #00D287;"></div>
+        </div>
+
+        <div class="card">
+          <h2>Existing Clients</h2>
+          {clients.length === 0 ? <p>No clients found or Database is unreachable/paused.</p> : null}
+          {clients.map((client) => (
+            <div class="client-row">
+              <div>
+                <strong>{client.name}</strong> <br/>
+                <span style="color: #aaa; font-size: 14px;">Token: {client.token}</span>
+              </div>
+              <div>
+                <a href={`/briefs/${client.token}`} target="_blank" style="color: #00B4DB; text-decoration: none; margin-right: 15px;">View Brief</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+
+  <script>
+    const form = document.getElementById('createClientForm');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('clientName').value;
+        const token = document.getElementById('clientToken').value;
+        const briefHtml = document.getElementById('briefHtml').value;
+        const msg = document.getElementById('statusMsg');
+
+        msg.textContent = "Saving...";
+        
+        try {
+          const res = await fetch('/api/admin/client', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, token, briefHtml })
+          });
+          
+          if (res.ok) {
+            msg.textContent = "Client brief saved successfully!";
+            window.location.reload();
+          } else {
+            const err = await res.text();
+            msg.textContent = "Error: " + err;
+            msg.style.color = "#FF4B2B";
+          }
+        } catch (err) {
+          msg.textContent = "Network Error.";
+          msg.style.color = "#FF4B2B";
+        }
+      });
+    }
+  </script>
+</body>
+</html>

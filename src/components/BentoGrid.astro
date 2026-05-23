@@ -44,27 +44,37 @@
     </div>
 
     <!-- ================================================ -->
-    <!-- BRAND — Kaiba Digital (Graphic Design / Brand)   -->
+    <!-- BRIEFS — Client Token Access Form                -->
     <!-- ================================================ -->
     <div class="bento-card portfolios-card expand-card" data-expand="portfolios">
       <div class="card-inner">
         <div class="card-front brand-front">
           <span class="expand-hint" aria-hidden="true"></span>
-          <div class="tab-label">BRAND</div>
+          <div class="tab-label">BRIEFS</div>
         </div>
         <div class="card-back">
           <button class="expand-close" aria-label="Flip back">&larr;</button>
-          <div class="back-content compact">
-            <span class="back-badge brand-accent">2023 &ndash; Present</span>
-            <h3 class="back-company">Kaiba Digital</h3>
-            <p class="back-role">Graphic Designer</p>
-            <span class="back-meta">Mexico</span>
-            <div class="back-tags">
-              <span class="back-tag">Figma</span>
-              <span class="back-tag">Brand Identity</span>
-              <span class="back-tag">Design Systems</span>
-              <span class="back-tag">Social Content</span>
-            </div>
+          <div class="back-content compact centered" style="text-align: center; justify-content: center; align-items: center;">
+            <h3 class="back-company" style="margin-bottom: 1.5cqw; font-size: 5cqw;">Client Access</h3>
+            <p class="back-desc" style="margin-bottom: 4cqw; font-size: 2.2cqw; color: #aaa;">Enter your unique token to securely view your project brief.</p>
+            
+            <form class="token-form" style="display: flex; flex-direction: column; gap: 2cqw; width: 100%; max-width: 300px; align-items: center;">
+              <input 
+                type="text" 
+                class="brief-token-input"
+                placeholder="Enter token..." 
+                required 
+                style="width: 100%; padding: 2.5cqw; border-radius: 1.5cqw; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; font-size: 2.8cqw; outline: none; text-align: center; font-family: 'Avenir Next', sans-serif; box-sizing: border-box;"
+              />
+              <button 
+                type="submit" 
+                style="padding: 2cqw 5cqw; background: #FF4B2B; color: #fff; border: none; border-radius: 1.2cqw; font-size: 2.5cqw; font-weight: 700; cursor: pointer; transition: transform 0.2s, filter 0.2s; font-family: 'Avenir Next', sans-serif;"
+                onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'"
+                onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'"
+              >
+                Access Brief
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -538,6 +548,19 @@
       renderer.render(scene, camera);
     };
     animate();
+  }
+
+  // Token Form Logic
+  const tokenForm = document.querySelector('.token-form');
+  if (tokenForm) {
+    tokenForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.querySelector('.brief-token-input');
+      const token = input.value.trim().toLowerCase();
+      if (token) {
+        window.location.href = `/briefs/${token}`;
+      }
+    });
   }
 </script>
 

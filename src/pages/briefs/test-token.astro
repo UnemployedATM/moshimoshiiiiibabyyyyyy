@@ -1,0 +1,105 @@
+---
+const clientName = "Test Client";
+const projectName = "Token Verification";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{clientName} - {projectName} Brief</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0d0d12;
+      color: #fff;
+      font-family: 'Avenir Next', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .brief-container {
+      width: 100%;
+      max-width: 800px;
+      padding: 40px 20px;
+    }
+    .header {
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .client-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(255, 75, 43, 0.15);
+      color: #FF4B2B;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 42px;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.02em;
+    }
+    p.subtitle {
+      font-size: 20px;
+      color: #aaa;
+      margin: 0;
+    }
+    .content-section {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      font-size: 24px;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #FF4B2B;
+    }
+    p {
+      line-height: 1.6;
+      color: #ddd;
+      font-size: 16px;
+    }
+    .back-btn {
+      display: inline-block;
+      margin-top: 40px;
+      color: #888;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .back-btn:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="brief-container">
+    <div class="header">
+      <span class="client-badge">{clientName}</span>
+      <h1>{projectName}</h1>
+      <p class="subtitle">Confidential Project Brief</p>
+    </div>
+
+    <div class="content-section">
+      <h2>Success!</h2>
+      <p>The routing logic is working perfectly. You successfully navigated to this page by entering the correct token.</p>
+    </div>
+
+    <div class="content-section">
+      <h2>How it works</h2>
+      <p>This file is located at <code>src/pages/briefs/test-token.astro</code>. Because the filename is <strong>test-token</strong>, Astro automatically makes this page accessible at <code>/briefs/test-token</code>.</p>
+    </div>
+
+    <a href="/" class="back-btn">&larr; Back to Portfolio</a>
+  </div>
+</body>
+</html>

@@ -11,7 +11,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.106.1",
     "astro": "^5.0.0",
     "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@astrojs/vercel": "^8.2.11",
+    "dotenv": "^17.4.2"
   }
 }
