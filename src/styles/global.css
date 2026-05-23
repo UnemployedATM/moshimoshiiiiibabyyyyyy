@@ -919,7 +919,7 @@ button {
   /* Reset grid template expansion on mobile to maintain flow */
   .bento-grid[class*="expand-"] {
     grid-template-columns: repeat(3, 1fr) !important;
-    grid-template-rows: auto !important;
+    grid-auto-rows: minmax(28vw, auto) !important;
   }
 
   .bento-card {
@@ -958,14 +958,14 @@ button {
   .gradient-card { order: 8; grid-column: span 2; grid-row: span 1; } /* Pink (Interfaces) */
 
   /* Accordion Dropdown Effect: when tapped, stretch dynamically to fit text! */
-  .bento-card.expanded {
+  .bento-card.is-expanded {
     grid-column: span 3 !important;
     grid-row: span 1 !important; /* Spans 1 row, but stretches the row's auto height */
     z-index: 20;
   }
 
   /* Release the back content from absolute positioning so it physically pushes the parent height */
-  .bento-card.expanded .card-back {
+  .bento-card.is-expanded .card-back {
     position: relative !important;
     height: auto !important;
     width: 100%;
