@@ -9,7 +9,7 @@ try {
   const { data, error } = await supabase
     .from('Client')
     .select('*')
-    .eq('token', token)
+    .ilike('token', token)
     .single();
     
   if (data) {
