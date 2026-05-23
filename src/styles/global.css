@@ -905,86 +905,77 @@ button {
 
 @media (max-width: 768px) {
   .bento-grid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+    gap: 4vw;
+    padding: 4vw;
+    padding-bottom: 15vw;
     overflow-y: auto;
-    gap: 4cqw;
-    padding: 4cqw;
-    padding-bottom: 15cqw;
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Reset grid template expansion on mobile to maintain 2-column flow */
+  .bento-grid[class*="expand-"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: auto !important;
+  }
+
   .bento-card {
-    grid-column: auto !important;
-    grid-row: auto !important;
-    min-height: 80cqw;
-    flex-shrink: 0;
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 40vw; /* Base square size */
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  .search-card {
-    min-height: 60cqw;
+  /* Wide blocks */
+  .uipedia-card { grid-column: 1 / -1; min-height: 35vw; } /* /Pablo Michel */
+  .gradient-card { grid-column: 1 / -1; min-height: 45vw; } /* Interfaces & Intelligence */
+  .explore-card { grid-column: 1 / -1; min-height: 90vw; } /* Bio text */
+  .resources-card { grid-column: 1 / -1; min-height: 50vw; } /* 3D Head */
+
+  /* Square blocks */
+  .dashboard-card { grid-column: 1 / 2; } /* EDITOR */
+  .guild-card { grid-column: 2 / 3; } /* design */
+  .portfolios-card { grid-column: 1 / 2; } /* BRIEFS */
+  .search-card { grid-column: 2 / 3; } /* AGENTS */
+
+  /* Accordion Dropdown Effect: when tapped, take full width and expand height */
+  .bento-card.expanded {
+    grid-column: 1 / -1 !important;
+    min-height: 120vw !important;
+    z-index: 20;
   }
 
-  .portfolios-card {
-    min-height: 80cqw;
-  }
-
-  .guild-card {
-    min-height: 60cqw;
-  }
-
-  .dashboard-card {
-    min-height: 60cqw;
-  }
-
-  .resources-card {
-    min-height: 60cqw;
-  }
-
-  .gradient-card {
-    min-height: 50cqw;
-  }
-
-  .explore-card {
-    min-height: 100cqw;
-  }
-
-  /* Scale up critical text for mobile stacked view */
+  /* Scale up critical text for mobile */
   .bio-text p {
-    font-size: 3.5cqw;
-    margin-bottom: 2cqw;
+    font-size: 5vw;
+    margin-bottom: 3vw;
   }
 
-  .subtitle {
-    font-size: 4cqw;
-  }
-
-  .logo-title {
-    font-size: 8cqw;
-  }
-
-  .tab-label {
-    font-size: 3.5cqw;
-    letter-spacing: 0.1em;
-  }
-
+  .subtitle { font-size: 5vw; }
+  .logo-title { font-size: 10vw; }
+  .tab-label { font-size: 5vw; letter-spacing: 0.1em; }
+  
   .expand-close {
-    width: 10cqw;
-    height: 10cqw;
-    font-size: 6cqw;
+    width: 12vw;
+    height: 12vw;
+    font-size: 7vw;
+    top: 2vw;
+    right: 2vw;
   }
 
   .skill-icon {
-    width: 12cqw;
-    height: 12cqw;
-    padding: 2.5cqw;
-    border-radius: 2.5cqw;
+    width: 12vw;
+    height: 12vw;
+    padding: 2.5vw;
+    border-radius: 2.5vw;
   }
 
   .icon-wrap::after {
-    font-size: 3.5cqw;
-    padding: 1.5cqw 3cqw;
-    border-radius: 2cqw;
+    font-size: 4vw;
+    padding: 2vw 4vw;
+    border-radius: 2vw;
     bottom: 110%;
   }
 }
