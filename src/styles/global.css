@@ -906,8 +906,9 @@ button {
 @media (max-width: 768px) {
   .bento-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: auto;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 28vw;
+    grid-auto-flow: dense;
     gap: 4vw;
     padding: 4vw;
     padding-bottom: 15vw;
@@ -915,75 +916,84 @@ button {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Reset grid template expansion on mobile to maintain 2-column flow */
+  /* Reset grid template expansion on mobile to maintain flow */
   .bento-grid[class*="expand-"] {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(3, 1fr) !important;
     grid-template-rows: auto !important;
   }
 
   .bento-card {
-    grid-column: auto;
-    grid-row: auto;
-    min-height: 40vw; /* Base square size */
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 0; /* Let grid-auto-rows handle height */
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  /* Mobile Grid Arrangement & Sizing */
-  /* Row 1: Full width */
-  .uipedia-card { order: 1; grid-column: 1 / -1; min-height: 35vw; } /* /Pablo Michel */
+  /* Mobile Grid Arrangement (Dense Packing) */
+  .uipedia-card { 
+    order: 1; 
+    grid-column: span 3; 
+    grid-row: span 1; 
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .uipedia-card .card-front {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-left: 0;
+  }
   
-  /* Row 2: Half blocks side by side */
-  .explore-card { order: 2; grid-column: 1 / 2; min-height: 130vw; } /* Bio text */
-  .resources-card { order: 3; grid-column: 2 / 3; min-height: 130vw; } /* 3D Head */
+  .resources-card { order: 2; grid-column: span 1; grid-row: span 1; } /* Yellow (Head) */
+  .explore-card { order: 3; grid-column: span 2; grid-row: span 2; } /* Dark Gray (Bio) */
+  .portfolios-card { order: 4; grid-column: span 1; grid-row: span 1; } /* Orange (Briefs) */
+  
+  .dashboard-card { order: 5; grid-column: span 2; grid-row: span 1; } /* Cyan (EDITOR) */
+  .search-card { order: 6; grid-column: span 1; grid-row: span 1; } /* Purple (AGENTS) */
+  
+  .guild-card { order: 7; grid-column: span 1; grid-row: span 1; } /* Green (Design) */
+  .gradient-card { order: 8; grid-column: span 2; grid-row: span 1; } /* Pink (Interfaces) */
 
-  /* Row 3: Half blocks side by side */
-  .dashboard-card { order: 4; grid-column: 1 / 2; } /* EDITOR */
-  .guild-card { order: 5; grid-column: 2 / 3; } /* design */
-
-  /* Row 4: Full width */
-  .gradient-card { order: 6; grid-column: 1 / -1; min-height: 45vw; } /* Interfaces & Intelligence */
-
-  /* Row 5: Half blocks side by side */
-  .portfolios-card { order: 7; grid-column: 1 / 2; } /* BRIEFS */
-  .search-card { order: 8; grid-column: 2 / 3; } /* AGENTS */
-
-  /* Accordion Dropdown Effect: when tapped, take full width and expand height */
+  /* Accordion Dropdown Effect: when tapped, take full width */
   .bento-card.expanded {
-    grid-column: 1 / -1 !important;
-    min-height: 140vw !important; /* Give extra room for back content when open */
+    grid-column: span 3 !important;
+    grid-row: span 4 !important; /* Make it very tall when open to fit content */
     z-index: 20;
   }
 
   /* Scale up critical text for mobile */
   .bio-text p {
-    font-size: 5.5vw;
-    margin-bottom: 4vw;
-    line-height: 1.4;
+    font-size: 4vw;
+    margin-bottom: 2vw;
+    line-height: 1.3;
   }
 
-  .subtitle { font-size: 5vw; }
-  .logo-title { font-size: 10vw; }
-  .tab-label { font-size: 5vw; letter-spacing: 0.1em; }
+  .subtitle { font-size: 4vw; }
+  .logo-title { font-size: 14vw; }
+  .tab-label { font-size: 4vw; letter-spacing: 0.1em; }
   
   .expand-close {
-    width: 12vw;
-    height: 12vw;
-    font-size: 7vw;
+    width: 10vw;
+    height: 10vw;
+    font-size: 6vw;
     top: 2vw;
     right: 2vw;
   }
 
   .skill-icon {
-    width: 12vw;
-    height: 12vw;
-    padding: 2.5vw;
-    border-radius: 2.5vw;
+    width: 10vw;
+    height: 10vw;
+    padding: 2vw;
+    border-radius: 2vw;
   }
 
   .icon-wrap::after {
-    font-size: 4vw;
-    padding: 2vw 4vw;
-    border-radius: 2vw;
+    font-size: 3.5vw;
+    padding: 2vw 3vw;
+    border-radius: 1.5vw;
     bottom: 110%;
   }
 }
