@@ -1006,51 +1006,60 @@ button {
   }
 
   /* ============================================================
-     Mobile Web View SVG Behavior: Color Flooding
-     When a card expands, all OTHER cards turn into blank solid 
-     shapes matching the color of the expanded card.
+     Mobile Web View SVG Behavior: 1-1 Layout Match
+     When a card expands, it visually merges with the entire grid, 
+     forming an L-shape around the Title and 3D Head.
      ============================================================ */
-  .bento-grid[class*="expand-"] .bento-card:not(.is-expanded)::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 50; /* Covers the content of unexpanded cards completely */
-    border-radius: inherit;
-    transition: opacity 0.4s ease;
-    opacity: 1;
-    pointer-events: none;
+  .bento-grid .bento-card::after { display: none !important; } /* Clear old pseudo-overlay */
+
+  /* 1. When grid is expanded, color the ENTIRE GRID to form the solid unified shape */
+  .bento-grid.expand-search { background-color: #C89BFF !important; }
+  .bento-grid.expand-portfolios { background-color: #FF4B2B !important; }
+  .bento-grid.expand-guild { background-color: #00D287 !important; }
+  .bento-grid.expand-dashboard { background-color: #00B4DB !important; }
+  .bento-grid.expand-resources { background-color: #FFC107 !important; }
+  .bento-grid.expand-gradient { background-color: #FF007F !important; }
+  .bento-grid.expand-explore { background-color: #2B2B3C !important; }
+
+  .bento-grid[class*="expand-"] {
+    min-height: 100vh;
+    border-radius: 4vw; /* Outer corners match the shape */
   }
 
-  /* Set default opacity 0 so it can transition in */
-  .bento-grid .bento-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    z-index: 50;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease, background-color 0s;
+  /* 2. Remove all unexpanded cards (except Title & Head) from the flow so the expanded card moves up */
+  .bento-grid[class*="expand-"] .bento-card:not(.is-expanded):not(.resources-card):not(.uipedia-card) {
+    display: none !important;
   }
 
-  /* Color map based on the active expanded card */
-  .bento-grid.expand-search .bento-card:not(.is-expanded)::after { background-color: #C89BFF; } /* Purple */
-  .bento-grid.expand-portfolios .bento-card:not(.is-expanded)::after { background-color: #FF4B2B; } /* Orange */
-  .bento-grid.expand-guild .bento-card:not(.is-expanded)::after { background-color: #00D287; } /* Green */
-  .bento-grid.expand-dashboard .bento-card:not(.is-expanded)::after { background-color: #00B4DB; } /* Cyan */
-  .bento-grid.expand-resources .bento-card:not(.is-expanded)::after { background-color: #FFC107; } /* Yellow */
-  .bento-grid.expand-gradient .bento-card:not(.is-expanded)::after { background-color: #FF007F; } /* Pink */
-  .bento-grid.expand-explore .bento-card:not(.is-expanded)::after { background-color: #2B2B3C; } /* Dark Gray */
-
-  /* Special behavior for 3D Head: Don't flip it, just make it bigger */
-  .resources-card.is-expanded .card-inner {
-    transform: none !important;
+  /* 3. The Title Box stays Black and uses a massive shadow to mask the top padding */
+  .bento-grid[class*="expand-"] .uipedia-card {
+    background-color: #000 !important;
+    box-shadow: 0 0 0 5vw #000 !important;
+    z-index: 10 !important;
+    border-radius: 0 !important;
   }
-  .resources-card.is-expanded .card-front {
+
+  /* 4. The 3D Head Box uses a black shadow to carve out its hole, creating the L-shape inner corner */
+  .bento-grid[class*="expand-"] .resources-card:not(.is-expanded) {
     opacity: 1 !important;
-    pointer-events: auto !important;
-    position: relative !important;
-    height: 100vw !important; /* Stretch canvas */
+    z-index: 10 !important;
+    box-shadow: 0 0 0 4vw #000 !important;
   }
+
+  /* 5. The expanded card's back face becomes transparent to blend perfectly into the grid background */
+  .bento-grid[class*="expand-"] .bento-card.is-expanded {
+    grid-column: span 3 !important;
+    grid-row: span 2 !important;
+    z-index: 5 !important;
+  }
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .card-back {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* Prevent Yellow Box back face issues if it expands */
+  .resources-card.is-expanded .card-inner { transform: none !important; }
+  .resources-card.is-expanded .card-front { opacity: 1 !important; pointer-events: auto !important; position: relative !important; height: 100vw !important; }
 
 }
