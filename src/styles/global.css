@@ -759,6 +759,23 @@ button {
   margin-top: 1.5cqw;
 }
 
+/* Bio expanded layout — 2-column skills grid on desktop */
+.skills-grid-mobile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5cqw;
+  margin-top: 1.5cqw;
+}
+
+.bio-bottom-row {
+  display: flex;
+  gap: 4cqw;
+}
+
+.bio-bottom-col {
+  flex: 1;
+}
+
 .skill-group {
   border-left: 1.2cqw solid rgba(255, 255, 255, 0.15);
   padding-left: 2.5cqw;
@@ -1133,8 +1150,10 @@ button {
   }
 
   /* Language entries */
-  .bento-grid[class*="expand-"] .lang-name {
+  .bento-grid[class*="expand-"] .lang-name,
+  .bento-grid[class*="expand-"] .lang-label {
     font-size: 4.5vw !important;
+    font-weight: 700 !important;
   }
   .bento-grid[class*="expand-"] .lang-level {
     font-size: 3.5vw !important;
@@ -1145,6 +1164,18 @@ button {
   .bento-grid[class*="expand-"] button[type="submit"] {
     font-size: 4vw !important;
     padding: 3vw !important;
+  }
+
+  /* Bio card: skills grid stacks to 1 column on mobile */
+  .skills-grid-mobile {
+    grid-template-columns: 1fr !important;
+    gap: 5vw !important;
+  }
+
+  /* Bio card: Education & Languages stack vertically */
+  .bio-bottom-row {
+    flex-direction: column !important;
+    gap: 5vw !important;
   }
 
   /* 6. Prevent Yellow Box back face issues if it expands */
