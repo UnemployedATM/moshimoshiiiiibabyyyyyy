@@ -1033,6 +1033,8 @@ button {
 
   /* 3. The Title Box stays Black and uses a massive shadow to mask the top padding */
   .bento-grid[class*="expand-"] .uipedia-card {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 / 2 !important; /* Explicitly lock to row 1 */
     background-color: #000 !important;
     box-shadow: 0 0 0 5vw #000 !important;
     z-index: 10 !important;
@@ -1041,6 +1043,8 @@ button {
 
   /* 4. The 3D Head Box uses a black shadow to carve out its hole, creating the L-shape inner corner */
   .bento-grid[class*="expand-"] .resources-card:not(.is-expanded) {
+    grid-column: 1 / 2 !important; /* Explicitly lock to col 1 */
+    grid-row: 2 / 3 !important;    /* Explicitly lock to row 2 so it isn't pushed to row 10 */
     opacity: 1 !important;
     z-index: 10 !important;
     box-shadow: 0 0 0 4vw #000 !important;
@@ -1066,6 +1070,12 @@ button {
     height: 100%;
     text-align: left !important;
   }
+  
+  /* Flatten split layouts so floats work inside them */
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .split-layout,
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .split-col {
+    display: block !important;
+  }
 
   /* 6. A mathematical spacer float that perfectly pushes content around the Yellow Box */
   .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content::before {
@@ -1076,10 +1086,11 @@ button {
     height: 32vw; /* 28vw (Yellow height) + 4vw (gap) */
   }
 
-  /* 7. Position the Title next to the Yellow Box */
-  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content h3 {
+  /* 7. Position ONLY the FIRST Title next to the Yellow Box */
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content > h3:first-of-type,
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content > .split-col:first-child > h3:first-of-type {
     overflow: hidden; /* Becomes BFC, stays to the right of the float */
-    height: 28vw; /* Matches the Yellow Box height exactly */
+    min-height: 28vw; /* Matches the Yellow Box height */
     margin: 0 !important;
     padding-right: 12vw !important; /* Make room for the close button */
     display: flex;
@@ -1092,7 +1103,8 @@ button {
   }
 
   /* 8. Force the rest of the content to flow full-width BELOW the Yellow Box */
-  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content h3 + * {
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content > h3:first-of-type + *,
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content > .split-col:first-child > h3:first-of-type + * {
     clear: left; /* Starts below the 32vw float spacer! */
   }
 
