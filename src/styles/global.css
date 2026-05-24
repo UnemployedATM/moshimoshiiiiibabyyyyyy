@@ -1004,4 +1004,53 @@ button {
     border-radius: 1.5vw;
     bottom: 110%;
   }
+
+  /* ============================================================
+     Mobile Web View SVG Behavior: Color Flooding
+     When a card expands, all OTHER cards turn into blank solid 
+     shapes matching the color of the expanded card.
+     ============================================================ */
+  .bento-grid[class*="expand-"] .bento-card:not(.is-expanded)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 50; /* Covers the content of unexpanded cards completely */
+    border-radius: inherit;
+    transition: opacity 0.4s ease;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  /* Set default opacity 0 so it can transition in */
+  .bento-grid .bento-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, background-color 0s;
+  }
+
+  /* Color map based on the active expanded card */
+  .bento-grid.expand-search .bento-card:not(.is-expanded)::after { background-color: #C89BFF; } /* Purple */
+  .bento-grid.expand-portfolios .bento-card:not(.is-expanded)::after { background-color: #FF4B2B; } /* Orange */
+  .bento-grid.expand-guild .bento-card:not(.is-expanded)::after { background-color: #00D287; } /* Green */
+  .bento-grid.expand-dashboard .bento-card:not(.is-expanded)::after { background-color: #00B4DB; } /* Cyan */
+  .bento-grid.expand-resources .bento-card:not(.is-expanded)::after { background-color: #FFC107; } /* Yellow */
+  .bento-grid.expand-gradient .bento-card:not(.is-expanded)::after { background-color: #FF007F; } /* Pink */
+  .bento-grid.expand-explore .bento-card:not(.is-expanded)::after { background-color: #2B2B3C; } /* Dark Gray */
+
+  /* Special behavior for 3D Head: Don't flip it, just make it bigger */
+  .resources-card.is-expanded .card-inner {
+    transform: none !important;
+  }
+  .resources-card.is-expanded .card-front {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    height: 100vw !important; /* Stretch canvas */
+  }
+
 }
