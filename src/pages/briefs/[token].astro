@@ -86,6 +86,44 @@ const rawHtml = client.briefHtml;
         page-break-inside: avoid !important;
         overflow: visible !important;
       }
+
+      /* === CHROMIUM FLEX/GRID PAGINATION BUG FIX === */
+      /* Chrome cannot paginate inside flex/grid. We MUST convert to block/inline-block */
+      .brief-content { display: block !important; }
+      
+      /* Target the user's custom layout classes */
+      .bento, .grid4, .grid2 {
+        display: block !important; /* Destroy flex/grid container */
+      }
+
+      /* Emulate grid columns using inline-block so they don't break */
+      .grid4 > div, .grid2 > div {
+        display: inline-block !important;
+        width: 48% !important;
+        vertical-align: top !important;
+        box-sizing: border-box !important;
+      }
+      .grid4 > div:nth-child(even), .grid2 > div:nth-child(even) { margin-left: 2% !important; }
+
+      .card {
+        display: block !important; /* Destroy flex column */
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+
+      /* Fix the 3-column strategy/totals cards */
+      .card.strat, .card.tot {
+        display: inline-block !important;
+        width: 32% !important;
+        margin-right: 1% !important;
+        vertical-align: top !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Fix the notes split */
+      .card.notes { display: inline-block !important; width: 60% !important; vertical-align: top !important; }
+      .card.notes-side { display: inline-block !important; width: 38% !important; margin-left: 1% !important; vertical-align: top !important; }
+      /* ============================================= */
       
       .brief-container {
         display: block !important;
