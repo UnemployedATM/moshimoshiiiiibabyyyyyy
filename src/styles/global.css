@@ -1032,6 +1032,9 @@ button {
   /* 1. Color the grid background to black */
   .bento-grid[class*="expand-"] {
     background-color: #000 !important;
+    grid-auto-rows: auto !important; /* Shrink title row to content, no 28vw minimum */
+    padding-bottom: 6vw !important;
+    overflow-y: auto !important;
   }
 
   /* 2. Hide ALL unexpanded cards including the 3D Head */
@@ -1060,6 +1063,7 @@ button {
     box-shadow: none !important;
     border-radius: 4vw !important;
     padding: 7vw !important;
+    padding-bottom: 10vw !important; /* Extra bottom room so nothing clips */
     display: flex !important;
   }
 
