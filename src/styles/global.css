@@ -1081,12 +1081,14 @@ button {
     overflow: hidden; /* Becomes BFC, stays to the right of the float */
     height: 28vw; /* Matches the Yellow Box height exactly */
     margin: 0 !important;
+    padding-right: 12vw !important; /* Make room for the close button */
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start; /* Left-align the text block */
+    text-align: left; /* Ensure wrapped text is left-aligned */
     font-size: 8vw !important; /* Massive title */
     font-style: italic; /* Match screenshot style */
+    line-height: 1.1; /* Tighter line spacing for massive text */
   }
 
   /* 8. Force the rest of the content to flow full-width BELOW the Yellow Box */
