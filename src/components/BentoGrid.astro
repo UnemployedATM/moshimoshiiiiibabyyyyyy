@@ -302,7 +302,7 @@
     card.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
 
-      if (target.closest('a')) return;
+      if (target.closest('a') || target.closest('input') || target.closest('button[type="submit"]')) return;
 
       // If this card is already expanded, close it (toggle)
       if (card.classList.contains('is-expanded')) {
