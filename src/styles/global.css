@@ -95,6 +95,50 @@ button {
 }
 
 /* ============================================================
+   Card Icons — hidden by default, shown when stage is narrow
+   ============================================================ */
+
+.card-icon {
+  display: none; /* Hidden at full size */
+  width: 40%;
+  max-width: 80px;
+  height: auto;
+  color: currentColor;
+}
+
+/* Desktop-only: when the stage container gets narrow, swap text → icons */
+@container (max-width: 700px) {
+  /* Hide all text labels and subtitles */
+  .tab-label,
+  .subtitle,
+  .bio-text {
+    display: none !important;
+  }
+
+  /* Show icons */
+  .card-icon {
+    display: block !important;
+  }
+
+  /* Shrink /Pablo Michel title */
+  .logo-title {
+    font-size: 3.5cqw !important;
+  }
+}
+
+/* Even narrower — 1/4 screen */
+@container (max-width: 450px) {
+  .logo-title {
+    font-size: 5cqw !important;
+  }
+
+  .card-icon {
+    width: 50%;
+    max-width: 60px;
+  }
+}
+
+/* ============================================================
    Hero (bio block)
    ============================================================ */
 
@@ -929,6 +973,11 @@ button {
    ============================================================ */
 
 @media (max-width: 768px) {
+
+  /* Never show card icons on mobile — mobile has its own text layout */
+  .card-icon { display: none !important; }
+  .tab-label, .subtitle, .bio-text { display: flex !important; }
+  .tab-label.is-comic { display: flex !important; }
 
   .bento-grid {
     display: grid;
