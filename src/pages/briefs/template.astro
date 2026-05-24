@@ -96,21 +96,23 @@ const projectName = "Project Name";
       }
       .top-bar, .back-btn { display: none !important; }
       
-      .brief-container { 
-        padding: 0 !important; 
-        max-width: none !important;
-      }
-
       /* Prevent elements from breaking across pages */
       .content-section, 
       .content-section > div, 
       .content-section p, 
       .content-section > * {
-        break-inside: avoid;
-        page-break-inside: avoid;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        overflow: visible !important;
+      }
+      
+      .brief-container { 
+        padding: 0 !important; 
+        max-width: none !important;
+        display: block !important;
       }
 
-      h1, h2, h3 { page-break-after: avoid; }
+      h1, h2, h3 { page-break-after: avoid !important; }
       
       @page { 
         margin: 1cm;

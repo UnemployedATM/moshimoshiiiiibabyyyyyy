@@ -77,19 +77,23 @@ const rawHtml = client.briefHtml;
       }
 
       /* Prevent elements from breaking across pages */
-      .brief-content > * {
-        break-inside: avoid;
-        page-break-inside: avoid;
+      .brief-content > *,
+      .brief-content div,
+      .brief-content section,
+      .brief-content article,
+      .brief-content .card {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        /* WebKit/Chrome BUG FIX: Chrome ignores break-inside if overflow is hidden or auto */
+        overflow: visible !important;
       }
       
-      /* Also target any common card/box classes inside the raw HTML */
-      .brief-content div,
-      .brief-content section {
-        break-inside: avoid;
-        page-break-inside: avoid;
+      /* Additional safeguard for flex/grid containers that might cause slicing */
+      .brief-content {
+        display: block !important;
       }
 
-      h1, h2, h3 { page-break-after: avoid; }
+      h1, h2, h3 { page-break-after: avoid !important; }
       
       @page { 
         margin: 1cm; /* Slightly smaller margins to fit more on the page */
