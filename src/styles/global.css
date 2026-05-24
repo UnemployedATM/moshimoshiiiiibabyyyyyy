@@ -1046,18 +1046,54 @@ button {
     box-shadow: 0 0 0 4vw #000 !important;
   }
 
-  /* 5. The expanded card's back face becomes transparent to blend perfectly into the grid background */
+  /* 5. The expanded card spans the ENTIRE grid layout (starting at row 2 so Title stays on top) */
   .bento-grid[class*="expand-"] .bento-card.is-expanded {
-    grid-column: span 3 !important;
-    grid-row: span 2 !important;
+    grid-column: 1 / -1 !important;
+    grid-row: 2 / 10 !important;
     z-index: 5 !important;
   }
   .bento-grid[class*="expand-"] .bento-card.is-expanded .card-back {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+    padding: 0 !important; /* Flush with grid boundaries */
+    display: block !important;
   }
-  
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content {
+    display: block !important;
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+    text-align: left !important;
+  }
+
+  /* 6. A mathematical spacer float that perfectly pushes content around the Yellow Box */
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content::before {
+    content: '';
+    display: block;
+    float: left;
+    width: calc(33.333% + 1.333vw); /* 1 column + gap */
+    height: 32vw; /* 28vw (Yellow height) + 4vw (gap) */
+  }
+
+  /* 7. Position the Title next to the Yellow Box */
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content h3 {
+    overflow: hidden; /* Becomes BFC, stays to the right of the float */
+    height: 28vw; /* Matches the Yellow Box height exactly */
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 8vw !important; /* Massive title */
+    font-style: italic; /* Match screenshot style */
+  }
+
+  /* 8. Force the rest of the content to flow full-width BELOW the Yellow Box */
+  .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content h3 + * {
+    clear: left; /* Starts below the 32vw float spacer! */
+  }
+
   /* Prevent Yellow Box back face issues if it expands */
   .resources-card.is-expanded .card-inner { transform: none !important; }
   .resources-card.is-expanded .card-front { opacity: 1 !important; pointer-events: auto !important; position: relative !important; height: 100vw !important; }
