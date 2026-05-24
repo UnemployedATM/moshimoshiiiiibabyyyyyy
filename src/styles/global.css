@@ -78,7 +78,10 @@ button {
 .stage {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: auto;
+  aspect-ratio: 3508 / 2481;
+  max-width: calc(100vh * (3508 / 2481));
+  max-height: 100vh;
   margin: auto;
   background: #000;
   overflow: hidden;
