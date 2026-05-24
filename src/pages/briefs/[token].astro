@@ -62,14 +62,38 @@ const rawHtml = client.briefHtml;
 
     /* Beautiful PDF Print Styles */
     @media print {
-      body { background: #fff; color: #000; }
-      .top-bar { display: none; }
-      .brief-content { 
-        background: transparent; border: none; padding: 0; margin: 0;
+      body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background: #0d0d12 !important;
       }
-      h1, h2, h3 { color: #000 !important; page-break-after: avoid; }
-      p { color: #333; }
-      @page { margin: 2cm; }
+      .top-bar { display: none !important; }
+      
+      .brief-content { 
+        background: transparent !important; 
+        border: none !important; 
+        padding: 0 !important; 
+        margin: 0 !important;
+      }
+
+      /* Prevent elements from breaking across pages */
+      .brief-content > * {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      
+      /* Also target any common card/box classes inside the raw HTML */
+      .brief-content div,
+      .brief-content section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      h1, h2, h3 { page-break-after: avoid; }
+      
+      @page { 
+        margin: 1cm; /* Slightly smaller margins to fit more on the page */
+      }
     }
   </style>
 </head>

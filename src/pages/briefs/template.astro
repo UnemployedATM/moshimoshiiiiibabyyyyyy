@@ -87,6 +87,35 @@ const projectName = "Project Name";
     .back-btn:hover {
       color: #fff;
     }
+    /* Beautiful PDF Print Styles */
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background: #0d0d12 !important;
+      }
+      .top-bar, .back-btn { display: none !important; }
+      
+      .brief-container { 
+        padding: 0 !important; 
+        max-width: none !important;
+      }
+
+      /* Prevent elements from breaking across pages */
+      .content-section, 
+      .content-section > div, 
+      .content-section p, 
+      .content-section > * {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      h1, h2, h3 { page-break-after: avoid; }
+      
+      @page { 
+        margin: 1cm;
+      }
+    }
   </style>
 </head>
 <body>
