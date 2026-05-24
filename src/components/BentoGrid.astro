@@ -309,7 +309,8 @@
 
       if (target.closest('a')) return;
 
-      if (target.closest('.expand-close')) {
+      // If this card is already expanded, close it (toggle)
+      if (card.classList.contains('is-expanded')) {
         card.classList.remove('is-expanded');
         if (grid) {
           const name = card.getAttribute('data-expand');
