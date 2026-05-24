@@ -87,6 +87,22 @@ const projectName = "Project Name";
     .back-btn:hover {
       color: #fff;
     }
+
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 15vw;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+      z-index: 0;
+      white-space: nowrap;
+      user-select: none;
+      letter-spacing: 0.1em;
+    }
+
     /* Beautiful PDF Print Styles */
     @media print {
       body {
@@ -126,7 +142,8 @@ const projectName = "Project Name";
   </style>
 </head>
 <body>
-  <div class="brief-container">
+  <div class="watermark">CONFIDENTIAL</div>
+  <div class="brief-container" style="position: relative; z-index: 1;">
     <div class="header">
       <span class="client-badge">{clientName}</span>
       <h1>{projectName}</h1>

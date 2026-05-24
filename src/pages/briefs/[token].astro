@@ -59,6 +59,21 @@ const rawHtml = client.briefHtml;
     .brief-content {
       background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; line-height: 1.6;
     }
+    
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 15vw;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+      z-index: 0;
+      white-space: nowrap;
+      user-select: none;
+      letter-spacing: 0.1em;
+    }
 
     /* Beautiful PDF Print Styles */
     @media print {
@@ -145,7 +160,8 @@ const rawHtml = client.briefHtml;
   </style>
 </head>
 <body>
-  <div class="brief-container">
+  <div class="watermark">CONFIDENTIAL</div>
+  <div class="brief-container" style="position: relative; z-index: 1;">
     
     <div class="top-bar">
       <a href="/" class="back-btn">&larr; Back to Portfolio</a>
