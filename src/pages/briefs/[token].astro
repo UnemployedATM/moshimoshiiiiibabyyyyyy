@@ -84,19 +84,24 @@ const rawHtml = client.briefHtml;
       .brief-content .card {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
-        /* WebKit/Chrome BUG FIX: Chrome ignores break-inside if overflow is hidden or auto */
         overflow: visible !important;
       }
       
-      /* Additional safeguard for flex/grid containers that might cause slicing */
-      .brief-content {
+      .brief-container {
         display: block !important;
+        width: 816px !important; /* Exact width of Letter paper at 96dpi */
+        max-width: 816px !important;
+        padding: 40px !important; /* Add internal padding since page margins are 0 */
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
       }
 
       h1, h2, h3 { page-break-after: avoid !important; }
       
+      /* Force browser print settings to match user requirements */
       @page { 
-        margin: 1cm; /* Slightly smaller margins to fit more on the page */
+        size: letter portrait;
+        margin: 0;
       }
     }
   </style>

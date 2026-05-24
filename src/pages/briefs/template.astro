@@ -107,15 +107,20 @@ const projectName = "Project Name";
       }
       
       .brief-container { 
-        padding: 0 !important; 
-        max-width: none !important;
         display: block !important;
+        width: 816px !important; /* Exact width of Letter paper at 96dpi */
+        max-width: 816px !important;
+        padding: 40px !important; /* Add internal padding since page margins are 0 */
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
       }
 
       h1, h2, h3 { page-break-after: avoid !important; }
       
+      /* Force browser print settings to match user requirements */
       @page { 
-        margin: 1cm;
+        size: letter portrait;
+        margin: 0;
       }
     }
   </style>
