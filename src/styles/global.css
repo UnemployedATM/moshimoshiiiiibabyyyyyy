@@ -1012,7 +1012,7 @@ button {
      ============================================================ */
   .bento-grid .bento-card::after { display: none !important; }
 
-  /* 1. Color the grid background to black (no color flood) */
+  /* 1. Color the grid background to black */
   .bento-grid[class*="expand-"] {
     background-color: #000 !important;
   }
@@ -1042,9 +1042,8 @@ button {
     border: none !important;
     box-shadow: none !important;
     border-radius: 4vw !important;
-    padding: 6vw !important;
+    padding: 7vw !important;
     display: flex !important;
-    min-height: 60vh;
   }
 
   .bento-grid[class*="expand-"] .bento-card.is-expanded .back-content {
@@ -1052,14 +1051,100 @@ button {
     width: 100%;
   }
 
-  /* Flatten split layouts on mobile */
+  /* Flatten split layouts on mobile — stack vertically */
   .bento-grid[class*="expand-"] .bento-card.is-expanded .split-layout {
     flex-direction: column !important;
+    gap: 6vw !important;
   }
 
   /* 5. Hide the back arrow on mobile — tap the card again to close */
   .bento-grid[class*="expand-"] .expand-close {
     display: none !important;
+  }
+
+  /* ============================================================
+     Mobile Expanded Card: Readable Font Sizes
+     ============================================================ */
+  .bento-grid[class*="expand-"] .back-company {
+    font-size: 7vw !important;
+    margin-bottom: 2vw !important;
+  }
+  .bento-grid[class*="expand-"] .back-role {
+    font-size: 4.5vw !important;
+    margin-bottom: 2vw !important;
+  }
+  .bento-grid[class*="expand-"] .back-meta {
+    font-size: 3.8vw !important;
+    margin-bottom: 3vw !important;
+  }
+  .bento-grid[class*="expand-"] .back-desc {
+    font-size: 4vw !important;
+    line-height: 1.6 !important;
+    margin-bottom: 4vw !important;
+  }
+  .bento-grid[class*="expand-"] .back-badge {
+    font-size: 3.5vw !important;
+    padding: 1.5vw 3vw !important;
+  }
+  .bento-grid[class*="expand-"] .back-tag {
+    font-size: 3.5vw !important;
+    padding: 1.5vw 3vw !important;
+  }
+  .bento-grid[class*="expand-"] .back-tags {
+    gap: 2vw !important;
+  }
+  .bento-grid[class*="expand-"] .back-divider {
+    margin: 4vw 0 !important;
+  }
+
+  /* Skill categories */
+  .bento-grid[class*="expand-"] .skill-cat {
+    font-size: 4.5vw !important;
+    margin-bottom: 2vw !important;
+  }
+  .bento-grid[class*="expand-"] .skill-icons {
+    gap: 3vw !important;
+  }
+  .bento-grid[class*="expand-"] .skill-group {
+    margin-bottom: 4vw !important;
+  }
+
+  /* Client entries */
+  .bento-grid[class*="expand-"] .client-entry {
+    padding: 3vw !important;
+    margin-bottom: 2vw !important;
+  }
+  .bento-grid[class*="expand-"] .client-entry strong {
+    font-size: 4vw !important;
+  }
+  .bento-grid[class*="expand-"] .client-entry .entry-meta {
+    font-size: 3.5vw !important;
+  }
+
+  /* Education entries */
+  .bento-grid[class*="expand-"] .edu-degree {
+    font-size: 4.5vw !important;
+  }
+  .bento-grid[class*="expand-"] .edu-school {
+    font-size: 3.8vw !important;
+  }
+  .bento-grid[class*="expand-"] .edu-year {
+    font-size: 3.5vw !important;
+  }
+
+  /* Language entries */
+  .bento-grid[class*="expand-"] .lang-name {
+    font-size: 4.5vw !important;
+  }
+  .bento-grid[class*="expand-"] .lang-level {
+    font-size: 3.5vw !important;
+  }
+
+  /* Form inputs inside cards (Client Access) */
+  .bento-grid[class*="expand-"] input,
+  .bento-grid[class*="expand-"] button[type="submit"] {
+    font-size: 4vw !important;
+    padding: 3vw !important;
   }
 
   /* 6. Prevent Yellow Box back face issues if it expands */

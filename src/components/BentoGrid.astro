@@ -502,48 +502,54 @@
       resizeObserver.observe(canvas.parentElement);
     }
 
-    // Look and snap logic
+    // Look and snap logic (desktop only)
     let targetRotationX = 0;
     let targetRotationY = 0;
+    const isMobile = window.innerWidth <= 768;
     
-    const cards = document.querySelectorAll('.bento-card');
-    cards.forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        if (card.id === 'head-card') {
-          targetRotationX = 0;
-          targetRotationY = 0;
-        } else {
-          const headRect = canvas.parentElement!.getBoundingClientRect();
-          const cardRect = card.getBoundingClientRect();
-          
-          const headCenterX = headRect.left + headRect.width / 2;
-          const headCenterY = headRect.top + headRect.height / 2;
-          
-          const cardCenterX = cardRect.left + cardRect.width / 2;
-          const cardCenterY = cardRect.top + cardRect.height / 2;
-          
-          const dx = cardCenterX - headCenterX;
-          const dy = cardCenterY - headCenterY;
-          
-          // Both axes should directly map to dx/dy to look AT the target
-          let rawY = (dx / window.innerWidth) * 1.2; 
-          let rawX = (dy / window.innerHeight) * 1.2;
-          
-          // Clamp the rotation so it doesn't turn too far (limit amount of X/Y movement)
-          const maxTurn = 0.5; // approx 35 degrees limit
-          targetRotationY = Math.max(-maxTurn, Math.min(maxTurn, rawY));
-          targetRotationX = Math.max(-maxTurn, Math.min(maxTurn, rawX));
-        }
+    if (!isMobile) {
+      const cards = document.querySelectorAll('.bento-card');
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          if (card.id === 'head-card') {
+            targetRotationX = 0;
+            targetRotationY = 0;
+          } else {
+            const headRect = canvas.parentElement!.getBoundingClientRect();
+            const cardRect = card.getBoundingClientRect();
+            
+            const headCenterX = headRect.left + headRect.width / 2;
+            const headCenterY = headRect.top + headRect.height / 2;
+            
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            
+            const dx = cardCenterX - headCenterX;
+            const dy = cardCenterY - headCenterY;
+            
+            let rawY = (dx / window.innerWidth) * 1.2; 
+            let rawX = (dy / window.innerHeight) * 1.2;
+            
+            const maxTurn = 0.5;
+            targetRotationY = Math.max(-maxTurn, Math.min(maxTurn, rawY));
+            targetRotationX = Math.max(-maxTurn, Math.min(maxTurn, rawX));
+          }
+        });
       });
-    });
+    }
 
     const animate = () => {
       requestAnimationFrame(animate);
       
-      // Much smoother snap interpolation (lowered from 0.15 to 0.06)
       if (headWrapper) {
-        headWrapper.rotation.x += (targetRotationX - headWrapper.rotation.x) * 0.04;
-        headWrapper.rotation.y += (targetRotationY - headWrapper.rotation.y) * 0.04;
+        if (isMobile) {
+          // Slow continuous 360° spin on mobile
+          headWrapper.rotation.y += 0.005;
+        } else {
+          // Smooth snap interpolation on desktop
+          headWrapper.rotation.x += (targetRotationX - headWrapper.rotation.x) * 0.04;
+          headWrapper.rotation.y += (targetRotationY - headWrapper.rotation.y) * 0.04;
+        }
       }
       
       renderer.render(scene, camera);
