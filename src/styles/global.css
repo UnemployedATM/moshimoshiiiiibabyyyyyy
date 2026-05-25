@@ -79,6 +79,7 @@ button {
   position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100svh;
   margin: auto;
   background: #000;
   overflow: hidden;
@@ -116,6 +117,9 @@ button {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  transform: translateZ(0); /* Hardware acceleration */
+  -webkit-font-smoothing: antialiased; /* Prevent text blur during transform */
+  backface-visibility: hidden; /* Prevent Safari flicker */
 }
 
 .interactive-card:hover {
@@ -272,6 +276,9 @@ button {
 .expand-card {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
 }
 
 .card-inner {
@@ -1193,4 +1200,22 @@ button {
   .resources-card.is-expanded .card-inner { transform: none !important; }
   .resources-card.is-expanded .card-front { opacity: 1 !important; pointer-events: auto !important; position: relative !important; height: 100vw !important; }
 
+}
+/* ============================================================
+   Fallback for older browsers (Safari 15-, older Chromium)
+   that do not support container queries (cqw).
+   ============================================================ */
+@supports not (container-type: inline-size) {
+  .stage { font-size: 1vw; }
+  .bento-grid { gap: 1.5vw; padding: 3vw; }
+  .interactive-card:hover { box-shadow: 0 1.5vw 4vw rgba(0, 0, 0, 0.6); }
+  .expand-card:not(.is-expanded):hover .card-front { transform: scale(1.08); box-shadow: 0 1.4vw 4.5vw rgba(0, 0, 0, 0.55); }
+  .tab-label { font-size: 2.5vw; }
+  .subtitle { font-size: 1.8vw; }
+  .bio-text { font-size: 1.5vw; }
+  .expand-close { width: 3vw; height: 3vw; font-size: 2.2vw; top: 0.8vw; right: 0.8vw; }
+  .logo-title { font-size: 5.5vw; margin-bottom: 1vw; }
+  .back-company { font-size: 2.5vw; }
+  .back-role { font-size: 3.8vw; }
+  .back-date { font-size: 1.2vw; }
 }
