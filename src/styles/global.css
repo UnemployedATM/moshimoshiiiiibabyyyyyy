@@ -99,10 +99,10 @@ button {
    ============================================================ */
 
 .card-icon {
-  display: none; /* Always hidden on desktop */
-  width: 40%;
+  display: none !important; /* Always hidden on desktop, overrides .hero svg */
+  width: 40% !important;
   max-width: 80px;
-  height: auto;
+  height: auto !important;
   color: currentColor;
 }
 
