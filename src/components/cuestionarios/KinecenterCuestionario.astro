@@ -132,12 +132,29 @@ const submittedDate = submittedAt
   .kc-why{display:block;font-size:13px;color:var(--kc-mut);background:var(--kc-card-2);border-left:3px solid var(--kc-accent,var(--kc-cyan));border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;line-height:1.55}
   .kc-why strong{color:var(--kc-accent,var(--kc-cyan));font-weight:700}
 
-  .kc-fld{width:100%;padding:14px 16px;border:1px solid var(--kc-line-2);border-radius:12px;background:var(--kc-card-2);color:var(--kc-white);font-family:inherit;font-size:15px;transition:border-color .18s,box-shadow .18s,background .18s}
-  .kc-fld::placeholder{color:var(--kc-mut-2)}
+  .kc-fld{
+    box-sizing:border-box;
+    display:block;width:100%;max-width:100%;min-width:0;
+    padding:14px 16px;
+    border:1px solid var(--kc-line-2);border-radius:12px;
+    background:var(--kc-card-2);color:var(--kc-white);
+    font-family:inherit;font-size:15px;line-height:1.4;
+    transition:border-color .18s,box-shadow .18s,background .18s;
+    text-overflow:ellipsis;
+  }
+  .kc-fld::placeholder{color:var(--kc-mut-2);text-overflow:ellipsis}
   .kc-fld:focus{outline:none;border-color:var(--kc-accent,var(--kc-cyan));box-shadow:0 0 0 3px color-mix(in srgb,var(--kc-accent,var(--kc-cyan)) 24%,transparent);background:#1c1c22}
   .kc-fld:disabled{opacity:.95;cursor:default}
-  textarea.kc-fld{min-height:96px;resize:vertical}
-  select.kc-fld{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a6a6b2' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:42px;cursor:pointer}
+  /* single-line text inputs: keep them on one line, scroll horizontally as the
+     caret moves past the visible width (browser default for type=text). */
+  input.kc-fld{white-space:nowrap;overflow:hidden}
+  /* textareas: never resize; wrap text and scroll vertically inside the box. */
+  textarea.kc-fld{
+    min-height:120px;height:120px;
+    resize:none;overflow:auto;
+    white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
+  }
+  select.kc-fld{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a6a6b2' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:42px;cursor:pointer;text-overflow:ellipsis}
 
   .kc-other-wrap{margin-top:12px}
   .kc-other-lbl{display:block;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--kc-mut);margin-bottom:6px}
