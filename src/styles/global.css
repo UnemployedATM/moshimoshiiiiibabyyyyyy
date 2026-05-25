@@ -86,13 +86,7 @@ button {
   font-size: 1cqw;
 }
 
-/* Desktop only: lock aspect ratio so grid and SVG scale together on resize */
-@media (min-width: 769px) {
-  .stage {
-    width:  min(100vw, calc(100vh * 3508 / 2481));
-    height: min(100vh, calc(100vw * 2481 / 3508));
-  }
-}
+
 
 /* ============================================================
    Card Icons — hidden on web, shown on mobile only
