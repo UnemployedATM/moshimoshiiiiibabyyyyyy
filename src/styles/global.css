@@ -88,17 +88,7 @@ button {
 
 
 
-/* ============================================================
-   Card Icons — hidden on web, shown on mobile only
-   ============================================================ */
 
-.card-icon {
-  display: none !important; /* Always hidden on desktop, overrides .hero svg */
-  width: 40% !important;
-  max-width: 80px;
-  height: auto !important;
-  color: currentColor;
-}
 
 /* ============================================================
    Hero (bio block)
@@ -936,10 +926,7 @@ button {
 
 @media (max-width: 768px) {
 
-  /* Mobile: swap text labels for icons */
-  .card-icon { display: block !important; }
-  .tab-label, .tab-label.is-comic { display: none !important; }
-  .subtitle { display: none !important; }
+
 
   .bento-grid {
     display: grid;
@@ -1018,7 +1005,7 @@ button {
 
   .subtitle { font-size: 4vw; }
   .logo-title { font-size: 14vw; }
-  .tab-label { font-size: 4vw; letter-spacing: 0.1em; }
+  .tab-label { font-size: 7vw; font-weight: 900; line-height: 1; letter-spacing: 0.05em; text-align: center; word-break: break-word; }
   
   .expand-close {
     width: 10vw;
