@@ -6,12 +6,15 @@
 
 interface KinecenterAnswers {
   broll?: string[];
+  broll_other?: string;
   pacientes_real?: string;
   offer?: string;
+  offer_other?: string;
   objecion_principal?: string;
   temporada?: string;
   competencia?: string;
   rodaje?: string;
+  rodaje_other?: string;
   vestuario?: string;
 }
 
@@ -136,6 +139,9 @@ const submittedDate = submittedAt
   textarea.kc-fld{min-height:96px;resize:vertical}
   select.kc-fld{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a6a6b2' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:42px;cursor:pointer}
 
+  .kc-other-wrap{margin-top:12px}
+  .kc-other-lbl{display:block;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--kc-mut);margin-bottom:6px}
+  .kc-other-lbl span{color:var(--kc-accent,var(--kc-cyan))}
   .kc-opts{display:flex;flex-direction:column;gap:11px}
   .kc-opt{display:flex;gap:14px;align-items:flex-start;padding:15px 18px;border:1px solid var(--kc-line);border-radius:14px;background:var(--kc-card-2);cursor:pointer;transition:border-color .16s,background .16s}
   .kc-opt:hover{border-color:var(--kc-line-2);background:#202027}
@@ -256,6 +262,12 @@ const submittedDate = submittedAt
                 <label class="kc-opt"><input type="checkbox" name="broll" value="recepcion" checked={isChecked('broll','recepcion')} disabled={isLocked} /><div class="kc-ot-t">Recepción limpia, moderna y con buena atención al cliente</div></label>
                 <label class="kc-opt"><input type="checkbox" name="broll" value="anatomia" checked={isChecked('broll','anatomia')} disabled={isLocked} /><div class="kc-ot-t">Modelos anatómicos, pizarras o iPads donde explican el dolor</div></label>
               </div>
+              {(!isLocked || v('broll_other')) && (
+                <div class="kc-other-wrap">
+                  <label class="kc-other-lbl" for="kc_broll_other"><span>+</span> Otro / Especificar (opcional)</label>
+                  <input type="text" id="kc_broll_other" name="broll_other" class="kc-fld" placeholder="Ej. Sala de espera con plantas y arte, mural con foto antes/después de pacientes..." value={v('broll_other') || ''} disabled={isLocked} />
+                </div>
+              )}
             </div>
             <div class="kc-qg">
               <label class="kc-qlab" for="kc_pacientes_real">¿Qué tan factible es grabar a pacientes reales (o actores/modelos simulando) para los videos de "Social Proof" y "Masaje"?</label>
@@ -288,6 +300,12 @@ const submittedDate = submittedAt
                 <label class="kc-opt"><input type="radio" name="offer" value="auditoria" checked={isChecked('offer','auditoria')} disabled={isLocked} /><div><div class="kc-ot-t"><strong>Auditoría de Ergonomía / Revisión de Pisada (Gratis con cita)</strong></div><div class="kc-ot-d">Un "Lead Magnet" de alto valor percibido que no devalúa el servicio médico.</div></div></label>
                 <label class="kc-opt"><input type="radio" name="offer" value="ninguna" checked={isChecked('offer','ninguna')} disabled={isLocked} /><div><div class="kc-ot-t"><strong>Ninguna. Mantenemos el precio de lista y competimos solo por marca/autoridad.</strong></div><div class="kc-ot-d">Advertencia: Esto elevará el Costo por Adquisición (CPA) en Meta Ads significativamente.</div></div></label>
               </div>
+              {(!isLocked || v('offer_other')) && (
+                <div class="kc-other-wrap">
+                  <label class="kc-other-lbl" for="kc_offer_other"><span>+</span> Otro / Especificar (opcional)</label>
+                  <input type="text" id="kc_offer_other" name="offer_other" class="kc-fld" placeholder="Ej. Primera sesión a precio promocional, paquete de 5 sesiones, descuento para empresas..." value={v('offer_other') || ''} disabled={isLocked} />
+                </div>
+              )}
             </div>
             <div class="kc-qg">
               <label class="kc-qlab" for="kc_objecion_principal">Cuando un lead pregunta precios por WhatsApp y NO agenda, ¿cuál es la objeción #1 que recibe su equipo?</label>
@@ -336,6 +354,12 @@ const submittedDate = submittedAt
                 <label class="kc-opt"><input type="radio" name="rodaje" value="viernes_tarde" checked={isChecked('rodaje','viernes_tarde')} disabled={isLocked} /><div class="kc-ot-t"><strong>Viernes por la tarde:</strong> Bloqueamos las últimas 4 horas de la clínica para grabar.</div></label>
                 <label class="kc-opt"><input type="radio" name="rodaje" value="pacientes_reales" checked={isChecked('rodaje','pacientes_reales')} disabled={isLocked} /><div class="kc-ot-t"><strong>Durante pacientes reales:</strong> Grabamos "sobre la marcha" (B-Roll real), pero sacrificamos control de audio/luz.</div></label>
               </div>
+              {(!isLocked || v('rodaje_other')) && (
+                <div class="kc-other-wrap">
+                  <label class="kc-other-lbl" for="kc_rodaje_other"><span>+</span> Otro / Especificar (opcional)</label>
+                  <input type="text" id="kc_rodaje_other" name="rodaje_other" class="kc-fld" placeholder="Ej. Sábado por la mañana antes de abrir, dos sesiones más cortas en lugar de un bloque..." value={v('rodaje_other') || ''} disabled={isLocked} />
+                </div>
+              )}
             </div>
             <div class="kc-qg">
               <label class="kc-qlab" for="kc_vestuario">¿Qué vestuario tiene disponible el equipo para los videos? (El algoritmo favorece la autoridad visual)</label>
@@ -377,12 +401,15 @@ const submittedDate = submittedAt
       const fd = new FormData(form);
       const answers: Record<string, any> = {
         broll: fd.getAll('broll').map(String),
+        broll_other: String(fd.get('broll_other') || '').trim(),
         pacientes_real: String(fd.get('pacientes_real') || ''),
         offer: String(fd.get('offer') || ''),
+        offer_other: String(fd.get('offer_other') || '').trim(),
         objecion_principal: String(fd.get('objecion_principal') || ''),
         temporada: String(fd.get('temporada') || ''),
         competencia: String(fd.get('competencia') || ''),
         rodaje: String(fd.get('rodaje') || ''),
+        rodaje_other: String(fd.get('rodaje_other') || '').trim(),
         vestuario: String(fd.get('vestuario') || ''),
       };
 
