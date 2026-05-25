@@ -1,175 +1,273 @@
 ---
 import { supabase } from '../../lib/supabase';
+import KinecenterCuestionario from '../../components/cuestionarios/KinecenterCuestionario.astro';
 
 const { token } = Astro.params;
 
-let client = null;
+let client: any = null;
 
 try {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('Client')
     .select('*')
-    .ilike('token', token)
+    .ilike('token', token!)
     .single();
-    
-  if (data) {
-    client = data;
-  }
+
+  if (data) client = data;
 } catch (error) {
-  console.error("Database error:", error);
+  console.error('Database error:', error);
 }
 
 if (!client) {
-  // Return a 404 response if token is invalid or DB fails
-  return new Response(null, {
-    status: 404,
-    statusText: 'Not found'
-  });
+  return new Response(null, { status: 404, statusText: 'Not found' });
 }
 
-// Clean up HTML safely or trust the DB
-const rawHtml = client.briefHtml;
+const hasBrief         = !!client.briefHtml;
+const hasQuestionnaire = !!client.questionnaireType;
+const hasPipeline      = !!client.pipelineHtml;
+
+const tabs: { id: string; label: string; show: boolean }[] = [
+  { id: 'brief',         label: 'Brief',        show: hasBrief },
+  { id: 'cuestionario',  label: 'Cuestionario', show: hasQuestionnaire },
+  { id: 'pipeline',      label: 'Pipeline',     show: hasPipeline },
+];
+
+const visibleTabs = tabs.filter(t => t.show);
+const defaultTab  = visibleTabs[0]?.id || 'brief';
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{client.name} - Brief</title>
-  <style is:global>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{client.name} — Brief</title>
+  <style>
+    :root{ color-scheme: dark; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
     body {
-      margin: 0; padding: 0; background: #0d0d12; color: #fff; font-family: 'Avenir Next', system-ui, sans-serif;
-      min-height: 100vh; display: flex; justify-content: center;
-    }
-    .brief-container {
-      width: 100%; max-width: 1400px; padding: 40px 20px;
-    }
-    .top-bar {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
-    }
-    .back-btn { color: #888; text-decoration: none; font-weight: 500; }
-    .back-btn:hover { color: #fff; }
-    
-    .print-btn {
-      background: #FF4B2B; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;
-    }
-    .print-btn:hover { filter: brightness(1.1); }
-    
-    .brief-content {
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; line-height: 1.6;
-    }
-    
-    .watermark {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-45deg);
-      font-size: 15vw;
-      font-weight: 900;
-      color: rgba(255, 255, 255, 0.03);
-      pointer-events: none;
-      z-index: 0;
-      white-space: nowrap;
-      user-select: none;
-      letter-spacing: 0.1em;
+      background:#0d0d12;color:#fff;
+      font-family:'Avenir Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      min-height:100vh;
     }
 
-    /* Beautiful PDF Print Styles */
-    @media print {
-      body {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        background: #0d0d12 !important;
-      }
-      .top-bar { display: none !important; }
-      
-      .brief-content { 
-        background: transparent !important; 
-        border: none !important; 
-        padding: 0 !important; 
-        margin: 0 !important;
-      }
+    .wp-shell{max-width:1400px;margin:0 auto;padding:24px 20px 60px;position:relative;z-index:1}
+    .wp-topbar{
+      display:flex;justify-content:space-between;align-items:center;
+      gap:16px;flex-wrap:wrap;margin-bottom:18px;
+    }
+    .wp-back{color:#888;text-decoration:none;font-weight:500;font-size:14px}
+    .wp-back:hover{color:#fff}
+    .wp-print{
+      background:#FF4B2B;color:#fff;border:none;padding:9px 18px;
+      border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;letter-spacing:.04em;
+    }
+    .wp-print:hover{filter:brightness(1.1)}
 
-      /* Prevent elements from breaking across pages */
-      .brief-content > *,
-      .brief-content div,
-      .brief-content section,
-      .brief-content article,
-      .brief-content .card {
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-        overflow: visible !important;
-      }
+    /* tab nav */
+    .wp-tabs{
+      display:flex;gap:6px;padding:6px;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);border-radius:14px;
+      margin:18px 0 22px;width:fit-content;max-width:100%;overflow-x:auto;
+    }
+    .wp-tab{
+      appearance:none;background:transparent;border:none;color:#aaa;
+      padding:10px 18px;border-radius:10px;cursor:pointer;
+      font:600 14px/1 inherit;letter-spacing:.02em;
+      transition:background .15s,color .15s;white-space:nowrap;
+    }
+    .wp-tab:hover{color:#fff}
+    .wp-tab[aria-selected="true"]{background:#FF4B2B;color:#fff;box-shadow:0 6px 18px -10px rgba(255,75,43,.7)}
 
-      /* === CHROMIUM FLEX/GRID PAGINATION BUG FIX === */
-      /* Chrome cannot paginate inside flex/grid. We MUST convert to block/inline-block */
-      .brief-content { display: block !important; }
-      
-      /* Target the user's custom layout classes */
-      .bento, .grid4, .grid2 {
-        display: block !important; /* Destroy flex/grid container */
-      }
+    /* panels */
+    .wp-panel{display:none}
+    .wp-panel[data-active="true"]{display:block}
 
-      /* Emulate grid columns using inline-block so they don't break */
-      .grid4 > div, .grid2 > div {
-        display: inline-block !important;
-        width: 48% !important;
-        vertical-align: top !important;
-        box-sizing: border-box !important;
-      }
-      .grid4 > div:nth-child(even), .grid2 > div:nth-child(even) { margin-left: 2% !important; }
+    /* iframe-rendered tabs (brief, pipeline) need flexible height */
+    .wp-iframe-wrap{
+      background:transparent;border:1px solid rgba(255,255,255,.06);
+      border-radius:18px;overflow:hidden;
+    }
+    .wp-iframe{
+      width:100%;border:0;display:block;
+      background:#0d0d12;color-scheme:dark;
+      min-height:90vh;
+    }
 
-      .card {
-        display: block !important; /* Destroy flex column */
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-      }
+    .wp-empty{
+      padding:60px 28px;text-align:center;color:#888;
+      background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.08);
+      border-radius:18px;
+    }
 
-      /* Fix the 3-column strategy/totals cards */
-      .card.strat, .card.tot {
-        display: inline-block !important;
-        width: 32% !important;
-        margin-right: 1% !important;
-        vertical-align: top !important;
-        box-sizing: border-box !important;
-      }
-      
-      /* Fix the notes split */
-      .card.notes { display: inline-block !important; width: 60% !important; vertical-align: top !important; }
-      .card.notes-side { display: inline-block !important; width: 38% !important; margin-left: 1% !important; vertical-align: top !important; }
-      /* ============================================= */
-      
-      .brief-container {
-        display: block !important;
-        width: 816px !important; /* Exact width of Letter paper at 96dpi */
-        max-width: 816px !important;
-        padding: 40px !important; /* Add internal padding since page margins are 0 */
-        margin: 0 auto !important;
-        box-sizing: border-box !important;
-      }
+    .watermark{
+      position:fixed;top:50%;left:50%;
+      transform:translate(-50%,-50%) rotate(-45deg);
+      font-size:15vw;font-weight:900;color:rgba(255,255,255,.03);
+      pointer-events:none;z-index:0;white-space:nowrap;user-select:none;letter-spacing:.1em;
+    }
 
-      h1, h2, h3 { page-break-after: avoid !important; }
-      
-      /* Force browser print settings to match user requirements */
-      @page { 
-        size: letter portrait;
-        margin: 0;
-      }
+    @media print{
+      .wp-topbar,.wp-tabs,.watermark{display:none !important}
+      .wp-panel{display:block !important}
+      .wp-iframe{min-height:auto}
+    }
+    @media (max-width:600px){
+      .wp-shell{padding:14px 10px 40px}
+      .wp-tab{padding:9px 14px;font-size:13px}
     }
   </style>
 </head>
 <body>
   <div class="watermark">CONFIDENTIAL</div>
-  <div class="brief-container" style="position: relative; z-index: 1;">
-    
-    <div class="top-bar">
-      <a href="/" class="back-btn">&larr; Back to Portfolio</a>
-      <button class="print-btn" onclick="window.print()">Download as PDF</button>
+
+  <div class="wp-shell">
+    <div class="wp-topbar">
+      <a href="/" class="wp-back">&larr; Back to Portfolio</a>
+      <button class="wp-print" onclick="window.print()">Download as PDF</button>
     </div>
 
-    <div class="brief-content" set:html={rawHtml}></div>
+    {visibleTabs.length > 1 && (
+      <div class="wp-tabs" role="tablist" aria-label="Brief sections">
+        {visibleTabs.map(t => (
+          <button
+            class="wp-tab"
+            role="tab"
+            id={`wp-tab-${t.id}`}
+            data-tab={t.id}
+            aria-controls={`wp-panel-${t.id}`}
+            aria-selected={t.id === defaultTab ? 'true' : 'false'}
+            tabindex={t.id === defaultTab ? 0 : -1}
+          >{t.label}</button>
+        ))}
+      </div>
+    )}
 
+    {hasBrief && (
+      <section
+        class="wp-panel"
+        id="wp-panel-brief"
+        role="tabpanel"
+        aria-labelledby="wp-tab-brief"
+        data-active={defaultTab === 'brief' ? 'true' : 'false'}
+      >
+        <div class="wp-iframe-wrap">
+          <iframe
+            class="wp-iframe"
+            title={`${client.name} — Brief`}
+            srcdoc={client.briefHtml}
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          ></iframe>
+        </div>
+      </section>
+    )}
+
+    {hasQuestionnaire && client.questionnaireType === 'kinecenter' && (
+      <section
+        class="wp-panel"
+        id="wp-panel-cuestionario"
+        role="tabpanel"
+        aria-labelledby="wp-tab-cuestionario"
+        data-active={defaultTab === 'cuestionario' ? 'true' : 'false'}
+      >
+        <KinecenterCuestionario
+          token={client.token}
+          answers={client.questionnaireAnswers}
+          submittedAt={client.questionnaireSubmittedAt}
+        />
+      </section>
+    )}
+
+    {hasPipeline && (
+      <section
+        class="wp-panel"
+        id="wp-panel-pipeline"
+        role="tabpanel"
+        aria-labelledby="wp-tab-pipeline"
+        data-active={defaultTab === 'pipeline' ? 'true' : 'false'}
+      >
+        <div class="wp-iframe-wrap">
+          <iframe
+            class="wp-iframe"
+            title={`${client.name} — Pipeline`}
+            srcdoc={client.pipelineHtml}
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          ></iframe>
+        </div>
+      </section>
+    )}
+
+    {visibleTabs.length === 0 && (
+      <div class="wp-empty">Este brief aún no tiene contenido publicado.</div>
+    )}
   </div>
+
+  <script>
+    (function () {
+      const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.wp-tab'));
+      const panels = Array.from(document.querySelectorAll<HTMLElement>('.wp-panel'));
+      if (tabs.length === 0) return;
+
+      function setActive(tabId: string, pushHash = true) {
+        let matched = false;
+        tabs.forEach(t => {
+          const on = t.dataset.tab === tabId;
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.setAttribute('tabindex', on ? '0' : '-1');
+          if (on) matched = true;
+        });
+        if (!matched) return;
+        panels.forEach(p => {
+          const on = p.id === `wp-panel-${tabId}`;
+          p.setAttribute('data-active', on ? 'true' : 'false');
+        });
+        if (pushHash) history.replaceState(null, '', '#' + tabId);
+        autosizeIframes();
+      }
+
+      function autosizeIframes() {
+        document.querySelectorAll<HTMLIFrameElement>('.wp-panel[data-active="true"] iframe.wp-iframe')
+          .forEach(fitIframe);
+      }
+
+      function fitIframe(frame: HTMLIFrameElement) {
+        try {
+          const doc = frame.contentDocument;
+          if (!doc) return;
+          const h = Math.max(
+            doc.documentElement.scrollHeight,
+            doc.body ? doc.body.scrollHeight : 0
+          );
+          if (h > 100) frame.style.height = (h + 24) + 'px';
+        } catch (_) { /* cross-origin or not ready */ }
+      }
+
+      tabs.forEach(t => {
+        t.addEventListener('click', () => setActive(t.dataset.tab!));
+      });
+
+      // Initial hash → active tab
+      const initial = (location.hash || '').replace('#', '');
+      if (initial && document.getElementById('wp-panel-' + initial)) {
+        setActive(initial, false);
+      }
+      window.addEventListener('hashchange', () => {
+        const h = (location.hash || '').replace('#', '');
+        if (h) setActive(h, false);
+      });
+
+      // Iframe autosize
+      document.querySelectorAll<HTMLIFrameElement>('iframe.wp-iframe').forEach(frame => {
+        frame.addEventListener('load', () => {
+          fitIframe(frame);
+          // re-measure as fonts/images settle
+          setTimeout(() => fitIframe(frame), 300);
+          setTimeout(() => fitIframe(frame), 1200);
+        });
+      });
+      window.addEventListener('resize', autosizeIframes);
+    })();
+  </script>
 </body>
 </html>
