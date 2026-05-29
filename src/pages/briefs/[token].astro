@@ -1,21 +1,32 @@
 ---
-import { supabase } from '../../lib/supabase';
+import { getSecureClient } from '../../lib/supabase-server';
 import KinecenterCuestionario from '../../components/cuestionarios/KinecenterCuestionario.astro';
 
 const { token } = Astro.params;
 
+if (!token) {
+  return new Response(null, { status: 400, statusText: 'Token required' });
+}
+
+// Create a secure client scoped to this specific token
+const supabase = getSecureClient(token);
+
 let client: any = null;
 
 try {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('Client')
     .select('*')
-    .ilike('token', token!)
+    .eq('token', token)
     .single();
-
-  if (data) client = data;
+  
+  if (error || !data) {
+    console.error('Database error or not found:', error);
+  } else {
+    client = data;
+  }
 } catch (error) {
-  console.error('Database error:', error);
+  console.error('Unexpected error:', error);
 }
 
 if (!client) {
