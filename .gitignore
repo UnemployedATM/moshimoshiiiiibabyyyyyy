@@ -1,9 +1,1 @@
-node_modules/
-.astro/
-dist/
-.DS_Store
-.env
-.env.local
-.vercel
-
-/src/generated/prisma
+(empty)
