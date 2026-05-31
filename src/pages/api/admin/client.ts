@@ -1,10 +1,12 @@
-import { supabase } from '../../../lib/supabase';
+import { serverClient as supabase } from '../../../lib/supabase-server';
 import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
-  // Verify admin auth
+  // Verify admin auth (read from process.env so it works at runtime on Vercel
+  // without relying on Vite build-time inlining).
+  const expected = process.env.ADMIN_PASSWORD ?? import.meta.env.ADMIN_PASSWORD;
   const authCookie = cookies.get('admin_auth')?.value;
-  if (authCookie !== import.meta.env.ADMIN_PASSWORD) {
+  if (authCookie !== expected) {
     return new Response('Unauthorized', { status: 401 });
   }
 

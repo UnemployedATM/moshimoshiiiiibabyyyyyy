@@ -1,9 +1,10 @@
 ---
 // src/pages/admin.astro
-import { supabase } from '../lib/supabase';
+import { serverClient as supabase } from '../lib/supabase-server';
 
-// Simple password protection based on .env
-const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD;
+// Simple password protection — prefer process.env (always populated at
+// request time on Vercel) over Vite's build-time-inlined import.meta.env.
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? import.meta.env.ADMIN_PASSWORD;
 
 // Check cookies for authentication
 const authCookie = Astro.cookies.get('admin_auth')?.value;

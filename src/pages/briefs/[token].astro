@@ -1,21 +1,26 @@
 ---
-import { supabase } from '../../lib/supabase';
+import { serverClient } from '../../lib/supabase-server';
 import KinecenterCuestionario from '../../components/cuestionarios/KinecenterCuestionario.astro';
 
 const { token } = Astro.params;
 
+if (!token) {
+  return new Response(null, { status: 400, statusText: 'Token required' });
+}
+
 let client: any = null;
 
 try {
-  const { data } = await supabase
+  const { data, error } = await serverClient
     .from('Client')
     .select('*')
-    .ilike('token', token!)
-    .single();
+    .ilike('token', token)
+    .maybeSingle();
 
-  if (data) client = data;
+  if (error) console.error('[briefs] DB error:', error);
+  if (data)  client = data;
 } catch (error) {
-  console.error('Database error:', error);
+  console.error('[briefs] Unexpected error:', error);
 }
 
 if (!client) {

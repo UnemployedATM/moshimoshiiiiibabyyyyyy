@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { supabase } from '../../../lib/supabase';
+import { serverClient as supabase } from '../../../lib/supabase-server';
 
 // POST /api/brief/questionnaire
 // Body: { token: string, type: string, answers: object }
