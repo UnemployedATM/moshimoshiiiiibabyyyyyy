@@ -22,10 +22,18 @@ import type { APIRoute } from 'astro';
  */
 export const POST: APIRoute = async ({ request, cookies }) => {
   // Auth — read from process.env so it works at runtime on Vercel without
-  // relying on Vite build-time inlining.
+  // relying on Vite build-time inlining. Fail-closed if either side is
+  // missing or empty (otherwise `undefined === undefined` would auth).
   const expected = process.env.ADMIN_PASSWORD ?? import.meta.env.ADMIN_PASSWORD;
   const authCookie = cookies.get('admin_auth')?.value;
-  if (authCookie !== expected) {
+  const authed =
+    typeof expected   === 'string' && expected.length   > 0 &&
+    typeof authCookie === 'string' && authCookie.length > 0 &&
+    authCookie === expected;
+  if (!authed) {
+    if (!expected) {
+      console.error('[admin/client] ADMIN_PASSWORD env var not set — refusing.');
+    }
     return new Response('Unauthorized', { status: 401 });
   }
 

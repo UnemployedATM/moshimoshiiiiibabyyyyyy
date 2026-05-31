@@ -8,19 +8,45 @@ const QUESTIONNAIRE_TYPES: { value: string; label: string }[] = [
   { value: 'kinecenter', label: 'Kinecenter — Creatividad & Paid Media' },
 ];
 
-// Simple password protection — prefer process.env (always populated at
-// request time on Vercel) over Vite's build-time-inlined import.meta.env.
+// Password protection. Prefer process.env (always populated at request time
+// on Vercel) over Vite's build-time-inlined import.meta.env.
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? import.meta.env.ADMIN_PASSWORD;
 
+if (!ADMIN_PASSWORD) {
+  // Fail-closed if the env var isn't set. Previously a missing env left
+  // `ADMIN_PASSWORD = undefined` and an empty cookie also resolves to
+  // `undefined`, so `undefined === undefined` was letting everyone in.
+  console.error('[admin] ADMIN_PASSWORD env var is not set — refusing all access.');
+}
+
 const authCookie = Astro.cookies.get('admin_auth')?.value;
-let isAuthenticated = authCookie === ADMIN_PASSWORD;
+let isAuthenticated =
+  typeof ADMIN_PASSWORD === 'string' && ADMIN_PASSWORD.length > 0 &&
+  typeof authCookie    === 'string' && authCookie.length    > 0 &&
+  authCookie === ADMIN_PASSWORD;
 
 if (Astro.request.method === 'POST') {
   const data = await Astro.request.formData();
+
+  // Logout handler
+  if (data.get('action') === 'logout') {
+    Astro.cookies.delete('admin_auth', { path: '/' });
+    return Astro.redirect('/admin');
+  }
+
   if (data.has('password')) {
-    const password = data.get('password')?.toString();
-    if (password === ADMIN_PASSWORD) {
-      Astro.cookies.set('admin_auth', password, { path: '/' });
+    const password = data.get('password')?.toString() ?? '';
+    if (ADMIN_PASSWORD && password === ADMIN_PASSWORD) {
+      // Hardened cookie: HttpOnly so client JS can't read it, Secure in
+      // production so it only travels over HTTPS, SameSite=Lax to allow
+      // top-level POST navigations, 7-day expiry.
+      Astro.cookies.set('admin_auth', password, {
+        path: '/',
+        httpOnly: true,
+        secure: import.meta.env.PROD,
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+      });
       isAuthenticated = true;
     } else {
       return new Response('Unauthorized', { status: 401 });
@@ -172,7 +198,15 @@ const fmtDate = (iso?: string | null) =>
 </head>
 <body>
   <div class="container">
-    <h1>Briefs Admin</h1>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px">
+      <h1 style="margin:0">Briefs Admin</h1>
+      {isAuthenticated && (
+        <form method="POST" style="margin:0">
+          <input type="hidden" name="action" value="logout" />
+          <button type="submit" class="ghost" style="font-size:13px;padding:8px 14px">Log out</button>
+        </form>
+      )}
+    </div>
 
     {!isAuthenticated ? (
       <div class="card">
