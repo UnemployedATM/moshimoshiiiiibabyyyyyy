@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getSecureClient } from '../../../lib/supabase-server';
+import { supabase } from '../../../lib/supabase';
 
 // POST /api/brief/questionnaire
 // Body: { token: string, type: string, answers: object }
@@ -23,14 +23,11 @@ export const POST: APIRoute = async ({ request }) => {
   if (!answers || typeof answers !== 'object')
                                         return json({ error: 'Missing answers' }, 400);
 
-  // Create a secure client scoped to this specific token
-  const supabase = getSecureClient(token);
-
   // Confirm the client exists for this token.
   const { data: existing, error: lookupErr } = await supabase
     .from('Client')
     .select('id, token, questionnaireType')
-    .eq('token', token)
+    .ilike('token', token)
     .single();
 
   if (lookupErr || !existing) {

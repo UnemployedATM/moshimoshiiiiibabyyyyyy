@@ -1,4 +1,4 @@
-import { getAdminClient } from '../../../lib/supabase-server';
+import { supabase } from '../../../lib/supabase';
 import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
@@ -17,7 +17,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     }
 
     // Upsert into Supabase (token is the unique constraint)
-    const supabase = getAdminClient();
     const { data: client, error } = await supabase
       .from('Client')
       .upsert({ name, token, briefHtml }, { onConflict: 'token' })

@@ -1,6 +1,6 @@
 ---
 // src/pages/admin.astro
-import { getAdminClient } from '../lib/supabase-server';
+import { supabase } from '../lib/supabase';
 
 // Simple password protection based on .env
 const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD;
@@ -28,7 +28,6 @@ if (Astro.request.method === 'POST') {
 let clients = [];
 if (isAuthenticated) {
   try {
-    const supabase = getAdminClient();
     const { data, error } = await supabase
       .from('Client')
       .select('*')
