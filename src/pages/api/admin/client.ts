@@ -1,4 +1,5 @@
 import { serverClient as supabase } from '../../../lib/supabase-server';
+import { verifySession } from '../../../lib/admin-auth';
 import type { APIRoute } from 'astro';
 
 /**
@@ -21,19 +22,10 @@ import type { APIRoute } from 'astro';
  *   - Same for `pipelineHtml: ""`.
  */
 export const POST: APIRoute = async ({ request, cookies }) => {
-  // Auth — read from process.env so it works at runtime on Vercel without
-  // relying on Vite build-time inlining. Fail-closed if either side is
-  // missing or empty (otherwise `undefined === undefined` would auth).
-  const expected = process.env.ADMIN_PASSWORD ?? import.meta.env.ADMIN_PASSWORD;
-  const authCookie = cookies.get('admin_auth')?.value;
-  const authed =
-    typeof expected   === 'string' && expected.length   > 0 &&
-    typeof authCookie === 'string' && authCookie.length > 0 &&
-    authCookie === expected;
-  if (!authed) {
-    if (!expected) {
-      console.error('[admin/client] ADMIN_PASSWORD env var not set — refusing.');
-    }
+  // Auth — verify the HMAC-signed session token from the cookie. The token
+  // is bound to ADMIN_PASSWORD as its HMAC key, so it can't be forged
+  // without the password, and it can't be reversed back into the password.
+  if (!verifySession(cookies.get('admin_auth')?.value)) {
     return new Response('Unauthorized', { status: 401 });
   }
 

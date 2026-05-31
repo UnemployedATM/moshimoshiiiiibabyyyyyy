@@ -1,6 +1,7 @@
 ---
 // src/pages/admin.astro
 import { serverClient as supabase } from '../lib/supabase-server';
+import { mintSession, verifySession, SESSION_TTL } from '../lib/admin-auth';
 
 // Known questionnaire types — extend this list when you build a new one
 // in src/components/cuestionarios/.
@@ -8,22 +9,16 @@ const QUESTIONNAIRE_TYPES: { value: string; label: string }[] = [
   { value: 'kinecenter', label: 'Kinecenter — Creatividad & Paid Media' },
 ];
 
-// Password protection. Prefer process.env (always populated at request time
-// on Vercel) over Vite's build-time-inlined import.meta.env.
+// Read the password only to validate a login attempt. The cookie itself
+// stores an HMAC-signed session token (see src/lib/admin-auth.ts), not
+// the password — so leaking the cookie can't reveal the password.
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? import.meta.env.ADMIN_PASSWORD;
-
 if (!ADMIN_PASSWORD) {
-  // Fail-closed if the env var isn't set. Previously a missing env left
-  // `ADMIN_PASSWORD = undefined` and an empty cookie also resolves to
-  // `undefined`, so `undefined === undefined` was letting everyone in.
   console.error('[admin] ADMIN_PASSWORD env var is not set — refusing all access.');
 }
 
 const authCookie = Astro.cookies.get('admin_auth')?.value;
-let isAuthenticated =
-  typeof ADMIN_PASSWORD === 'string' && ADMIN_PASSWORD.length > 0 &&
-  typeof authCookie    === 'string' && authCookie.length    > 0 &&
-  authCookie === ADMIN_PASSWORD;
+let isAuthenticated = verifySession(authCookie);
 
 if (Astro.request.method === 'POST') {
   const data = await Astro.request.formData();
@@ -36,16 +31,17 @@ if (Astro.request.method === 'POST') {
 
   if (data.has('password')) {
     const password = data.get('password')?.toString() ?? '';
-    if (ADMIN_PASSWORD && password === ADMIN_PASSWORD) {
-      // Hardened cookie: HttpOnly so client JS can't read it, Secure in
-      // production so it only travels over HTTPS, SameSite=Lax to allow
-      // top-level POST navigations, 7-day expiry.
-      Astro.cookies.set('admin_auth', password, {
+    if (typeof ADMIN_PASSWORD === 'string' && ADMIN_PASSWORD.length > 0 && password === ADMIN_PASSWORD) {
+      const token = mintSession();
+      if (!token) {
+        return new Response('Server misconfigured (no ADMIN_PASSWORD).', { status: 500 });
+      }
+      Astro.cookies.set('admin_auth', token, {
         path: '/',
         httpOnly: true,
         secure: import.meta.env.PROD,
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7,
+        maxAge: SESSION_TTL,
       });
       isAuthenticated = true;
     } else {
