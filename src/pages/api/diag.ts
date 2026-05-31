@@ -28,12 +28,18 @@ export const GET: APIRoute = async () => {
     const key =
       process?.env?.SUPABASE_ANON_KEY ?? import.meta.env.SUPABASE_ANON_KEY ?? '';
     const sb = createClient(url, key);
-    const { data, error, status, statusText } = await sb
-      .from('Client')
-      .select('token, name')
-      .ilike('token', 'Kine-0123')
-      .single();
-    result.db = { data, error: error?.message ?? null, status, statusText };
+    const all = await sb.from('Client').select('token, name').limit(20);
+    const eq = await sb.from('Client').select('token').eq('token', 'Kine-0123');
+    const il = await sb.from('Client').select('token').ilike('token', 'kine-0123');
+    result.db = {
+      all_count: all.data?.length ?? null,
+      all_tokens: all.data?.map((r: any) => r.token) ?? null,
+      all_error: all.error?.message ?? null,
+      eq_count: eq.data?.length ?? null,
+      eq_error: eq.error?.message ?? null,
+      ilike_count: il.data?.length ?? null,
+      ilike_error: il.error?.message ?? null,
+    };
   } catch (e: any) {
     result.db = { thrown: e?.message ?? String(e) };
   }
