@@ -2,18 +2,21 @@
 // src/pages/admin.astro
 import { serverClient as supabase } from '../lib/supabase-server';
 
+// Known questionnaire types — extend this list when you build a new one
+// in src/components/cuestionarios/.
+const QUESTIONNAIRE_TYPES: { value: string; label: string }[] = [
+  { value: 'kinecenter', label: 'Kinecenter — Creatividad & Paid Media' },
+];
+
 // Simple password protection — prefer process.env (always populated at
 // request time on Vercel) over Vite's build-time-inlined import.meta.env.
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? import.meta.env.ADMIN_PASSWORD;
 
-// Check cookies for authentication
 const authCookie = Astro.cookies.get('admin_auth')?.value;
 let isAuthenticated = authCookie === ADMIN_PASSWORD;
 
-// Handle login attempt
 if (Astro.request.method === 'POST') {
   const data = await Astro.request.formData();
-  
   if (data.has('password')) {
     const password = data.get('password')?.toString();
     if (password === ADMIN_PASSWORD) {
@@ -25,22 +28,38 @@ if (Astro.request.method === 'POST') {
   }
 }
 
-// Fetch all clients if authenticated
-let clients = [];
+interface ClientRow {
+  id: string;
+  name: string;
+  token: string;
+  briefHtml: string | null;
+  questionnaireType: string | null;
+  questionnaireAnswers: Record<string, any> | null;
+  questionnaireSubmittedAt: string | null;
+  pipelineHtml: string | null;
+  created_at?: string;
+}
+
+let clients: ClientRow[] = [];
 if (isAuthenticated) {
   try {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('Client')
       .select('*')
       .order('created_at', { ascending: false });
-      
-    if (data) {
-      clients = data;
-    }
+    if (data) clients = data as ClientRow[];
   } catch (error) {
-    console.error("Database connection failed:", error);
+    console.error('[admin] Database connection failed:', error);
   }
 }
+
+const fmtDate = (iso?: string | null) =>
+  iso
+    ? new Date(iso).toLocaleString('es-MX', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      })
+    : '';
 ---
 
 <!DOCTYPE html>
@@ -50,17 +69,105 @@ if (isAuthenticated) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Briefs Admin Dashboard</title>
   <style>
-    body {
-      margin: 0; padding: 0; background: #0d0d12; color: #fff; font-family: 'Avenir Next', sans-serif;
+    :root{ color-scheme: dark; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin:0; padding:0; }
+    body { background:#0d0d12; color:#fff; font-family:'Avenir Next', system-ui, -apple-system, sans-serif; line-height:1.5; }
+
+    .container { max-width: 1080px; margin: 40px auto; padding: 0 24px 60px; }
+    h1 { font-size: 28px; letter-spacing:-.02em; margin: 0 0 24px; }
+    h2 { font-size: 20px; margin: 0 0 16px; font-weight: 700; }
+
+    .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 24px; margin-bottom: 22px; }
+
+    label { display:block; font-size: 13px; font-weight: 600; letter-spacing:.04em; color:#bbb; margin: 12px 0 6px; }
+    input, textarea, select {
+      width: 100%; padding: 11px 14px;
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.12); color: #fff;
+      border-radius: 8px; font-family: inherit; font-size: 14px;
     }
-    .container { max-width: 900px; margin: 40px auto; padding: 20px; }
-    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-    input, textarea { width: 100%; padding: 12px; margin: 8px 0 16px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px; font-family: inherit; box-sizing: border-box; }
-    textarea { height: 200px; resize: vertical; }
-    button { padding: 12px 24px; background: #FF4B2B; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    textarea { min-height: 180px; resize: vertical; font-family: ui-monospace, 'JetBrains Mono', monospace; font-size: 13px; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #FF4B2B; box-shadow: 0 0 0 3px rgba(255,75,43,.18); }
+
+    button {
+      padding: 10px 20px; background: #FF4B2B; color:#fff; border: none; border-radius: 8px;
+      cursor: pointer; font-weight: 700; font-size: 14px; letter-spacing:.02em;
+    }
     button:hover { filter: brightness(1.1); }
-    .client-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .danger { background: #ff3333; }
+    button.ghost { background: transparent; border: 1px solid rgba(255,255,255,.2); color:#ddd; }
+    button.danger { background: #ff3333; }
+    button[disabled] { opacity:.55; cursor: not-allowed; filter: none; }
+
+    .row-actions { display:flex; gap:10px; align-items:center; margin-top: 10px; flex-wrap: wrap; }
+    .msg { font-size: 13px; min-height: 18px; }
+    .msg.ok  { color:#00D287; }
+    .msg.err { color:#FF4B2B; }
+    .muted { color:#888; font-size: 13px; }
+
+    /* Client list */
+    .client {
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: rgba(255,255,255,.02);
+      overflow: hidden;
+    }
+    .client > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .client > summary::-webkit-details-marker { display: none; }
+    .client > summary::before {
+      content: "▸"; color:#777; font-size: 13px; margin-right: 8px; transition: transform .15s;
+      display: inline-block; width: 14px;
+    }
+    .client[open] > summary::before { transform: rotate(90deg); }
+    .c-head-l { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+    .c-name { font-weight: 700; font-size: 16px; }
+    .c-token { color:#888; font-size: 13px; font-family: ui-monospace, monospace; }
+
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 999px; border: 1px solid;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .badge.on  { color:#00D287; border-color: rgba(0,210,135,.4); background: rgba(0,210,135,.08); }
+    .badge.off { color:#666; border-color: rgba(255,255,255,.1); background: transparent; }
+    .badge.warn{ color:#FFC107; border-color: rgba(255,193,7,.4); background: rgba(255,193,7,.08); }
+
+    .view-link {
+      color: #00B4DB; text-decoration: none; font-size: 13px; font-weight: 600;
+      padding: 6px 12px; border: 1px solid rgba(0,180,219,.3); border-radius: 6px;
+    }
+    .view-link:hover { background: rgba(0,180,219,.1); }
+
+    .panels { padding: 0 20px 20px; border-top: 1px solid rgba(255,255,255,.06); }
+    .panel { margin-top: 16px; }
+    .panel summary {
+      cursor: pointer; padding: 12px 14px; border-radius: 8px;
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+      font-weight: 600; font-size: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .panel summary::-webkit-details-marker { display: none; }
+    .panel-body { padding: 16px 4px 4px; }
+    .panel-status { font-size: 12px; color:#888; font-weight: 500; }
+
+    .answers-preview {
+      background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px; padding: 12px 14px; font-size: 12px;
+      font-family: ui-monospace, monospace; color:#ccc;
+      max-height: 180px; overflow: auto; white-space: pre-wrap;
+    }
+
+    @media (max-width: 640px) {
+      .container { margin: 16px auto; padding: 0 14px 40px; }
+      .client > summary { padding: 14px 16px; }
+      .c-head-l { gap: 8px; }
+    }
   </style>
 </head>
 <body>
@@ -71,81 +178,237 @@ if (isAuthenticated) {
       <div class="card">
         <h2>Login Required</h2>
         <form method="POST">
-          <input type="password" name="password" placeholder="Enter Admin Password" required />
-          <button type="submit">Login</button>
+          <input type="password" name="password" placeholder="Enter Admin Password" required autofocus />
+          <div class="row-actions">
+            <button type="submit">Login</button>
+          </div>
         </form>
       </div>
     ) : (
       <>
         <div class="card">
-          <h2>Create New Client Brief</h2>
+          <h2>Create New Client</h2>
+          <p class="muted" style="margin-top:-8px">Brief only is required up front. You can attach a Cuestionario or Pipeline later from the client list below.</p>
+
           <form id="createClientForm">
-            <label>Client Name</label>
-            <input type="text" id="clientName" required placeholder="e.g. Ozone Media" />
-            
-            <label>Unique Token (Clients will type this to access)</label>
-            <input type="text" id="clientToken" required placeholder="e.g. ozone-2024" />
-            
-            <label>Brief Content (HTML)</label>
-            <textarea id="briefHtml" required placeholder="<h1>Project Overview</h1><p>...</p>"></textarea>
-            
-            <button type="submit">Save Client & Brief</button>
+            <label for="newName">Client name</label>
+            <input id="newName" name="newName" type="text" required placeholder="e.g. Ozone Media" autocomplete="off" />
+
+            <label for="newToken">Unique token <span class="muted">(client types this to access)</span></label>
+            <input id="newToken" name="newToken" type="text" required placeholder="e.g. ozone-2024" autocomplete="off" />
+
+            <label for="newBriefHtml">Brief HTML</label>
+            <textarea id="newBriefHtml" name="newBriefHtml" required placeholder="<h1>Project Overview</h1><p>...</p>"></textarea>
+
+            <div class="row-actions">
+              <button type="submit">Create client</button>
+              <span id="createMsg" class="msg ok"></span>
+            </div>
           </form>
-          <div id="statusMsg" style="margin-top: 10px; color: #00D287;"></div>
         </div>
 
         <div class="card">
-          <h2>Existing Clients</h2>
-          {clients.length === 0 ? <p>No clients found or Database is unreachable/paused.</p> : null}
-          {clients.map((client) => (
-            <div class="client-row">
-              <div>
-                <strong>{client.name}</strong> <br/>
-                <span style="color: #aaa; font-size: 14px;">Token: {client.token}</span>
-              </div>
-              <div>
-                <a href={`/briefs/${client.token}`} target="_blank" style="color: #00B4DB; text-decoration: none; margin-right: 15px;">View Brief</a>
-              </div>
-            </div>
-          ))}
+          <h2>Existing clients</h2>
+          {clients.length === 0 && (
+            <p class="muted">No clients yet — create one above.</p>
+          )}
+
+          {clients.map((c) => {
+            const hasBrief = !!c.briefHtml;
+            const hasQ     = !!c.questionnaireType;
+            const answered = !!c.questionnaireAnswers;
+            const hasPipe  = !!c.pipelineHtml;
+            const knownType = QUESTIONNAIRE_TYPES.find(t => t.value === c.questionnaireType);
+            return (
+              <details class="client" data-token={c.token}>
+                <summary>
+                  <div class="c-head-l">
+                    <span class="c-name">{c.name || '(no name)'}</span>
+                    <span class="c-token">{c.token}</span>
+                    <span class="badges">
+                      <span class={`badge ${hasBrief ? 'on' : 'off'}`}>{hasBrief ? '✓ Brief' : '— Brief'}</span>
+                      <span class={`badge ${hasQ ? (answered ? 'on' : 'warn') : 'off'}`}>
+                        {hasQ
+                          ? (answered ? '✓ Cuestionario · respondido' : '◷ Cuestionario · pendiente')
+                          : '— Cuestionario'}
+                      </span>
+                      <span class={`badge ${hasPipe ? 'on' : 'off'}`}>{hasPipe ? '✓ Pipeline' : '— Pipeline'}</span>
+                    </span>
+                  </div>
+                  <a class="view-link" href={`/briefs/${c.token}`} target="_blank" rel="noopener">View live →</a>
+                </summary>
+
+                <div class="panels">
+                  <!-- BRIEF -->
+                  <details class="panel" data-tab="brief">
+                    <summary>
+                      <span>Brief HTML</span>
+                      <span class="panel-status">{hasBrief ? `${c.briefHtml!.length.toLocaleString()} chars` : 'empty'}</span>
+                    </summary>
+                    <div class="panel-body">
+                      <textarea data-field="briefHtml" placeholder="<h1>Project Overview</h1>...">{c.briefHtml ?? ''}</textarea>
+                      <div class="row-actions">
+                        <button type="button" data-action="save-brief">Save Brief</button>
+                        <span class="msg" data-msg="brief"></span>
+                      </div>
+                    </div>
+                  </details>
+
+                  <!-- CUESTIONARIO -->
+                  <details class="panel" data-tab="questionnaire">
+                    <summary>
+                      <span>Cuestionario</span>
+                      <span class="panel-status">
+                        {hasQ
+                          ? (answered ? `respondido ${fmtDate(c.questionnaireSubmittedAt)}` : 'pendiente del cliente')
+                          : 'desactivado'}
+                      </span>
+                    </summary>
+                    <div class="panel-body">
+                      <label>Tipo de cuestionario</label>
+                      <select data-field="questionnaireType">
+                        <option value="">— (ninguno · oculta la pestaña)</option>
+                        {QUESTIONNAIRE_TYPES.map(t => (
+                          <option value={t.value} selected={c.questionnaireType === t.value}>{t.label}</option>
+                        ))}
+                        {c.questionnaireType && !knownType && (
+                          <option value={c.questionnaireType} selected>{c.questionnaireType} (custom)</option>
+                        )}
+                      </select>
+                      <div class="row-actions">
+                        <button type="button" data-action="save-questionnaire-type">Save Cuestionario type</button>
+                        <span class="msg" data-msg="qtype"></span>
+                      </div>
+
+                      {answered && (
+                        <div style="margin-top:18px">
+                          <label>Respuestas enviadas <span class="muted">({fmtDate(c.questionnaireSubmittedAt)})</span></label>
+                          <div class="answers-preview">{JSON.stringify(c.questionnaireAnswers, null, 2)}</div>
+                          <div class="row-actions">
+                            <button type="button" class="ghost danger" data-action="clear-answers">Clear submitted answers</button>
+                            <span class="msg" data-msg="clear"></span>
+                          </div>
+                          <p class="muted" style="margin-top:8px">Borra las respuestas y deja al cliente responder de nuevo. La pestaña sigue activa.</p>
+                        </div>
+                      )}
+                    </div>
+                  </details>
+
+                  <!-- PIPELINE -->
+                  <details class="panel" data-tab="pipeline">
+                    <summary>
+                      <span>Pipeline HTML</span>
+                      <span class="panel-status">{hasPipe ? `${c.pipelineHtml!.length.toLocaleString()} chars` : 'empty'}</span>
+                    </summary>
+                    <div class="panel-body">
+                      <textarea data-field="pipelineHtml" placeholder="Pipeline content (HTML)...">{c.pipelineHtml ?? ''}</textarea>
+                      <div class="row-actions">
+                        <button type="button" data-action="save-pipeline">Save Pipeline</button>
+                        <button type="button" class="ghost" data-action="clear-pipeline">Disable tab</button>
+                        <span class="msg" data-msg="pipe"></span>
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              </details>
+            );
+          })}
         </div>
       </>
     )}
   </div>
 
   <script>
-    const form = document.getElementById('createClientForm');
-    if (form) {
-      form.addEventListener('submit', async (e) => {
+    // -- Create new client --
+    const createForm = document.getElementById('createClientForm') as HTMLFormElement | null;
+    if (createForm) {
+      const msg = document.getElementById('createMsg')!;
+      createForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('clientName').value;
-        const token = document.getElementById('clientToken').value;
-        const briefHtml = document.getElementById('briefHtml').value;
-        const msg = document.getElementById('statusMsg');
+        const name      = (document.getElementById('newName')      as HTMLInputElement).value.trim();
+        const token     = (document.getElementById('newToken')     as HTMLInputElement).value.trim();
+        const briefHtml = (document.getElementById('newBriefHtml') as HTMLTextAreaElement).value;
 
-        msg.textContent = "Saving...";
-        
+        msg.className = 'msg ok';
+        msg.textContent = 'Saving…';
         try {
           const res = await fetch('/api/admin/client', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, token, briefHtml })
+            body: JSON.stringify({ name, token, briefHtml }),
           });
-          
           if (res.ok) {
-            msg.textContent = "Client brief saved successfully!";
-            window.location.reload();
+            msg.textContent = 'Created. Reloading…';
+            setTimeout(() => window.location.reload(), 400);
           } else {
-            const err = await res.text();
-            msg.textContent = "Error: " + err;
-            msg.style.color = "#FF4B2B";
+            msg.className = 'msg err';
+            msg.textContent = 'Error: ' + (await res.text());
           }
-        } catch (err) {
-          msg.textContent = "Network Error.";
-          msg.style.color = "#FF4B2B";
+        } catch (err: any) {
+          msg.className = 'msg err';
+          msg.textContent = 'Network error.';
         }
       });
     }
+
+    // -- Per-client actions --
+    async function patchClient(
+      token: string,
+      payload: Record<string, any>,
+      msgEl: HTMLElement,
+      reload = false,
+    ) {
+      msgEl.className = 'msg ok';
+      msgEl.textContent = 'Saving…';
+      try {
+        const res = await fetch('/api/admin/client', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, ...payload }),
+        });
+        if (res.ok) {
+          msgEl.textContent = 'Saved ✓';
+          if (reload) setTimeout(() => window.location.reload(), 600);
+          else setTimeout(() => (msgEl.textContent = ''), 2400);
+        } else {
+          msgEl.className = 'msg err';
+          msgEl.textContent = 'Error: ' + (await res.text());
+        }
+      } catch (e: any) {
+        msgEl.className = 'msg err';
+        msgEl.textContent = 'Network error.';
+      }
+    }
+
+    document.querySelectorAll<HTMLElement>('details.client').forEach((row) => {
+      const token = row.dataset.token!;
+      row.querySelectorAll<HTMLButtonElement>('button[data-action]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const action = btn.dataset.action;
+          const get = (sel: string) =>
+            row.querySelector<HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement>(sel);
+          const msgFor = (key: string) =>
+            row.querySelector<HTMLElement>(`[data-msg="${key}"]`)!;
+
+          if (action === 'save-brief') {
+            const html = get('[data-field="briefHtml"]')!.value;
+            await patchClient(token, { briefHtml: html }, msgFor('brief'), true);
+          } else if (action === 'save-questionnaire-type') {
+            const type = get('[data-field="questionnaireType"]')!.value;
+            await patchClient(token, { questionnaireType: type }, msgFor('qtype'), true);
+          } else if (action === 'clear-answers') {
+            if (!confirm(`Clear submitted answers for ${token}? The client will be able to resubmit.`)) return;
+            await patchClient(token, { clearAnswers: true }, msgFor('clear'), true);
+          } else if (action === 'save-pipeline') {
+            const html = get('[data-field="pipelineHtml"]')!.value;
+            await patchClient(token, { pipelineHtml: html }, msgFor('pipe'), true);
+          } else if (action === 'clear-pipeline') {
+            if (!confirm(`Disable Pipeline tab for ${token}? Stored HTML will be removed.`)) return;
+            await patchClient(token, { pipelineHtml: '' }, msgFor('pipe'), true);
+          }
+        });
+      });
+    });
   </script>
 </body>
 </html>
