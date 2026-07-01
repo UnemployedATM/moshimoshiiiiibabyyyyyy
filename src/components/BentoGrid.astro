@@ -1,6 +1,60 @@
 ---
 // BentoGrid.astro — Bento portfolio with flippable client cards
 // CV data from Pablo_J_Michel_CV_2026.docx on each card's back face
+import WorkList from './WorkList.astro';
+import Icon from './Icon.astro';
+
+// ─────────────────────────────────────────────────────────────
+// CLIENT WORKS  →  edit here to add real links / material
+// Each work: { label, url, type? }
+//   • type omitted / 'link' → clickable link (opens new tab)
+//   • type: 'video'         → embedded player (YouTube / Vimeo / .mp4 file)
+//   • type: 'audio'         → embedded <audio> player (.mp3 / .wav file)
+//   • url: '' (empty)       → muted "soon" chip (placeholder)
+// Set  nda: true  on a client to show a protected notice instead of works.
+// ─────────────────────────────────────────────────────────────
+const videoWorks = [
+  {
+    id: 'ozone', name: 'Ozone Media', meta: '2024 – Present', color: '#00B4DB',
+    works: [
+      { label: 'Add project link', url: '' },
+    ],
+  },
+  {
+    id: 'quillcut', name: 'QuillCut Media', meta: '2024 – Present', color: '#00B4DB',
+    nda: true, works: [],
+  },
+];
+
+const audioWorks = [
+  {
+    id: 'radio-ibero', name: 'Radio Ibero', meta: 'Soundscape film · 2023', color: '#00D287',
+    works: [
+      { label: 'Radio Ibero — film', url: '', type: 'video' },
+    ],
+  },
+  {
+    id: 'other-audio', name: 'Other Audio Works', meta: 'Mixing · Sound design', color: '#00D287',
+    works: [
+      { label: 'Add audio work', url: '' },
+    ],
+  },
+];
+
+// Dai Blue — both disciplines
+const daiBlue = {
+  id: 'dai-blue', name: 'Dai Blue', meta: 'Video + Audio · 2023 – Present',
+  video: [
+    { label: 'Editing & music', url: 'https://www.youtube.com/watch?v=fZxcnIMjUG4', type: 'video' },
+    { label: '2D compositing', url: 'https://www.youtube.com/watch?v=rA16NzL8mH8&t=1s', type: 'video' },
+  ],
+  audio: [
+    { label: 'Music composer', url: 'https://www.youtube.com/watch?v=NImKXJeqCKw', type: 'video' },
+  ],
+};
+
+// Single-discipline clients share one detail template
+const singleClients = [...videoWorks, ...audioWorks];
 ---
 
 <div class="hero" aria-hidden="false">
@@ -120,65 +174,88 @@
         </div>
         <div class="card-back">
           <button class="expand-close" aria-label="Flip back">&larr;</button>
-          <div class="back-content split-layout">
-            <div class="split-col">
-              <h3 class="back-company">Active Clients</h3>
-              <div class="client-list tight">
-                <div class="client-entry" style="border-left-color: #00B4DB;">
-                  <div class="entry-info">
-                    <strong>Ozone Media</strong>
-                    <span class="entry-meta">2024 &ndash; Present</span>
+          <div class="back-content editor-back">
+
+            <!-- ── LIST VIEW ────────────────────────────────── -->
+            <div class="works-view" data-view="list">
+              <div class="works-columns">
+                <div class="split-col">
+                  <h3 class="back-company">Video Works</h3>
+                  <div class="client-list tight">
+                    {videoWorks.map((c) => (
+                      <button type="button" class="client-entry client-btn" data-open={c.id}>
+                        {c.nda
+                          ? <Icon name="lock" class="entry-lock" />
+                          : <Icon name="chevron" class="entry-chevron" />}
+                        <span class="entry-info">
+                          <strong>{c.name}</strong>
+                          <span class="entry-meta">{c.meta}</span>
+                        </span>
+                        <span class="entry-status active" style={`background:${c.color}`}></span>
+                      </button>
+                    ))}
                   </div>
-                  <span class="entry-status active" style="border-color: #00B4DB; background: #00B4DB;"></span>
                 </div>
-                <div class="client-entry" style="border-left-color: #00B4DB;">
-                  <div class="entry-info">
-                    <strong>QuillCut Media</strong>
-                    <span class="entry-meta">2024 &ndash; Present</span>
+                <div class="split-col">
+                  <h3 class="back-company">Audio Works</h3>
+                  <div class="client-list tight">
+                    {audioWorks.map((c) => (
+                      <button type="button" class="client-entry client-btn" data-open={c.id}>
+                        <Icon name="chevron" class="entry-chevron" />
+                        <span class="entry-info">
+                          <strong>{c.name}</strong>
+                          <span class="entry-meta">{c.meta}</span>
+                        </span>
+                        <span class="entry-status active" style={`background:${c.color}`}></span>
+                      </button>
+                    ))}
                   </div>
-                  <span class="entry-status active" style="border-color: #00B4DB; background: #00B4DB;"></span>
-                </div>
-                <div class="client-entry" style="border-left-color: #00B4DB;">
-                  <div class="entry-info">
-                    <strong>Dai Blue</strong>
-                    <span class="entry-meta">2023 &ndash; Present</span>
-                  </div>
-                  <span class="entry-status active" style="border-color: #00B4DB; background: #00B4DB;"></span>
                 </div>
               </div>
+
+              <!-- Dai Blue — both disciplines -->
+              <button type="button" class="client-entry client-btn dai-blue-btn" data-open={daiBlue.id}>
+                <Icon name="chevron" class="entry-chevron" />
+                <span class="entry-info">
+                  <strong>{daiBlue.name}</strong>
+                  <span class="entry-meta">{daiBlue.meta}</span>
+                </span>
+                <span class="dual-status" aria-hidden="true">
+                  <span class="entry-status active" style="background:#00B4DB"></span>
+                  <span class="entry-status active" style="background:#00D287"></span>
+                </span>
+              </button>
             </div>
-            <div class="split-col">
-              <h3 class="back-company">Sound Design</h3>
-              <div class="client-list tight">
-                <div class="client-entry" style="border-left-color: #00D287;">
-                  <div class="entry-info">
-                    <strong>Dai Blue</strong>
-                    <span class="entry-meta">Composer &amp; Sound</span>
-                    <span class="entry-meta">2023 &ndash; Present</span>
-                  </div>
-                  <span class="entry-status active" style="border-color: #00D287; background: #00D287;"></span>
-                </div>
-                <div class="client-entry" style="border-left-color: #00D287;">
-                  <div class="entry-info">
-                    <strong>Radio Ibero</strong>
-                    <span class="entry-meta">Soundscapes</span>
-                    <span class="entry-meta">2023</span>
-                  </div>
-                  <span class="entry-status" style="border-color: #aaa;"></span>
-                </div>
+
+            <!-- ── DETAIL VIEWS — single-discipline clients ── -->
+            {singleClients.map((c) => (
+              <div class="works-view works-detail" data-detail={c.id} hidden>
+                <button type="button" class="works-back"><Icon name="back" class="back-ico" />Works</button>
+                <h3 class="back-company detail-title">{c.name}</h3>
+                <span class="entry-meta detail-meta">{c.meta}</span>
+                {c.nda
+                  ? (
+                    <div class="nda-panel">
+                      <Icon name="lock" class="nda-lock" />
+                      <p class="nda-title">Protected under NDA</p>
+                      <p class="nda-desc">Work for {c.name} is confidential. Details available on request.</p>
+                    </div>
+                  )
+                  : <WorkList works={c.works} />}
               </div>
-              <h3 class="back-company" style="margin-top: 2cqw;">Compositing</h3>
-              <div class="client-list tight">
-                <div class="client-entry" style="border-left-color: #00D287;">
-                  <div class="entry-info">
-                    <strong>Dai Blue</strong>
-                    <span class="entry-meta">2D Compositor</span>
-                    <span class="entry-meta">2023 &middot; MX / CN / CO</span>
-                  </div>
-                  <span class="entry-status" style="border-color: #aaa;"></span>
-                </div>
-              </div>
+            ))}
+
+            <!-- ── DETAIL VIEW — Dai Blue (both groups) ────── -->
+            <div class="works-view works-detail" data-detail={daiBlue.id} hidden>
+              <button type="button" class="works-back">&larr; Works</button>
+              <h3 class="back-company detail-title">{daiBlue.name}</h3>
+              <span class="entry-meta detail-meta">{daiBlue.meta}</span>
+              <h4 class="work-group-label" style="color:#00B4DB">Video</h4>
+              <WorkList works={daiBlue.video} />
+              <h4 class="work-group-label" style="color:#00D287">Audio</h4>
+              <WorkList works={daiBlue.audio} />
             </div>
+
           </div>
         </div>
       </div>
@@ -350,6 +427,41 @@
       });
     }
   });
+
+  // ── EDITOR card: client → works navigation ──────────────────
+  const editorCard = document.querySelector<HTMLElement>('[data-expand="dashboard"]');
+  if (editorCard) {
+    const listView = editorCard.querySelector<HTMLElement>('[data-view="list"]');
+    const detailViews = editorCard.querySelectorAll<HTMLElement>('.works-detail');
+
+    const showList = () => {
+      detailViews.forEach(d => { d.hidden = true; });
+      if (listView) listView.hidden = false;
+    };
+    const showDetail = (id: string | null) => {
+      if (listView) listView.hidden = true;
+      detailViews.forEach(d => { d.hidden = d.getAttribute('data-detail') !== id; });
+    };
+
+    editorCard.querySelectorAll<HTMLElement>('.client-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showDetail(btn.getAttribute('data-open'));
+      });
+    });
+    editorCard.querySelectorAll<HTMLElement>('.works-back').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showList();
+      });
+    });
+
+    // Always return to the list when the card collapses
+    const obs = new MutationObserver(() => {
+      if (!editorCard.classList.contains('is-expanded')) showList();
+    });
+    obs.observe(editorCard, { attributes: true, attributeFilter: ['class'] });
+  }
 </script>
 
 <script>

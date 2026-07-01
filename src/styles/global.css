@@ -101,7 +101,7 @@ button {
   z-index: 1;
 }
 
-.hero svg {
+.hero svg:not(.ico) {
   display: block;
   width: 100%;
   height: 100%;
@@ -691,6 +691,246 @@ button {
   background: rgba(255, 255, 255, 0.05) !important;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8) !important;
 }
+
+/* ============================================================
+   Client works — clickable buttons + works detail view
+   ============================================================ */
+
+/* Two-level views inside the EDITOR card back */
+.editor-back { position: relative; }
+
+.works-view { flex-direction: column; height: 100%; min-height: 0; }
+.works-view:not([hidden]) { display: flex; }
+
+.works-columns {
+  display: flex;
+  flex-direction: row;
+  gap: 6cqw;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Make a .client-entry behave as a button */
+.client-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  color: inherit;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* Let client names wrap instead of truncating in the button list */
+.client-btn .entry-info strong,
+.client-btn .entry-info .entry-meta {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+/* Flat, filled, monochrome icons */
+.ico {
+  fill: currentColor;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.entry-chevron {
+  width: 3.4cqw;
+  height: 3.4cqw;
+  color: rgba(255, 255, 255, 0.35);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s ease;
+}
+
+.client-btn:hover .entry-chevron {
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateX(0.6cqw);
+}
+
+/* Dai Blue — spans full width, signals "both" */
+.dai-blue-btn {
+  margin-top: 1.5cqw;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dual-status {
+  display: flex;
+  gap: 0.8cqw;
+  flex-shrink: 0;
+}
+
+/* Works detail view */
+.works-detail { overflow-y: auto; gap: 0.5cqw; }
+
+.works-back {
+  appearance: none;
+  -webkit-appearance: none;
+  align-self: flex-start;
+  font-family: inherit;
+  font-size: 2.4cqw;
+  font-weight: 600;
+  color: #cccccc;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.2cqw;
+  padding: 1cqw 2.4cqw;
+  margin-bottom: 2cqw;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.works-back:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.detail-title { font-size: 5cqw; margin-bottom: 0.4cqw; }
+.detail-meta { margin-bottom: 2cqw; }
+
+.work-group-label {
+  font-size: 2.4cqw;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 1.5cqw 0 1cqw;
+}
+
+.work-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1cqw;
+}
+
+.work-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5cqw;
+  padding: 1.6cqw 2cqw;
+  border-radius: 1.5cqw;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 2.6cqw;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.work-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(0.6cqw);
+}
+
+.wl-arrow { color: #00D287; width: 2.8cqw; height: 2.8cqw; }
+
+.work-link.is-empty {
+  color: #777777;
+  font-weight: 500;
+  cursor: default;
+  border-style: dashed;
+}
+
+.work-link.is-empty:hover {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.06);
+  transform: none;
+}
+
+.wl-tag {
+  font-size: 1.9cqw;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #888;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.4cqw 1.4cqw;
+  border-radius: 5cqw;
+  flex-shrink: 0;
+}
+
+/* Lock icon on NDA-protected client buttons */
+.entry-lock {
+  width: 3cqw;
+  height: 3cqw;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.works-back .back-ico {
+  width: 2.6cqw;
+  height: 2.6cqw;
+  margin-right: 0.6cqw;
+}
+
+/* NDA-protected detail panel */
+.nda-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  gap: 1cqw;
+  padding: 4cqw 2cqw;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 2cqw;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.nda-lock { width: 7cqw; height: 7cqw; color: rgba(255, 255, 255, 0.55); }
+.nda-title { font-size: 3.2cqw; font-weight: 700; color: #ffffff; }
+.nda-desc { font-size: 2.4cqw; color: #999999; line-height: 1.5; max-width: 80%; }
+
+/* Embedded video work (16:9 responsive) */
+.work-media {
+  display: flex;
+  flex-direction: column;
+  gap: 1cqw;
+}
+
+.wm-label {
+  font-size: 2.4cqw;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.work-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 1.5cqw;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.work-embed iframe,
+.work-embed video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* Embedded audio work */
+.work-audio {
+  display: flex;
+  flex-direction: column;
+  gap: 1cqw;
+  padding: 1.6cqw 2cqw;
+  border-radius: 1.5cqw;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.wa-label { font-size: 2.6cqw; font-weight: 600; color: #ffffff; }
+.work-audio audio { width: 100%; height: 3.4cqw; }
 
 /* ============================================================
    Contact card back
