@@ -17,7 +17,7 @@ const videoWorks = [
   {
     id: 'ozone', name: 'Ozone Media', meta: '2024 – Present', color: '#00B4DB',
     works: [
-      { label: 'Add project link', url: '' },
+      { label: 'Selected work', url: '' },
     ],
   },
   {
@@ -36,7 +36,7 @@ const audioWorks = [
   {
     id: 'other-audio', name: 'Other Audio Works', meta: 'Mixing · Sound design', color: '#00D287',
     works: [
-      { label: 'Add audio work', url: '' },
+      { label: 'Mixing & sound design selects', url: '' },
     ],
   },
 ];
@@ -57,13 +57,13 @@ const daiBlue = {
 const singleClients = [...videoWorks, ...audioWorks];
 ---
 
-<div class="hero" aria-hidden="false">
+<div class="hero">
   <div class="bento-grid">
 
     <!-- ================================================ -->
     <!-- AGENTS — Kaiba Digital (AI System Design)        -->
     <!-- ================================================ -->
-    <div class="bento-card search-card expand-card" data-expand="search">
+    <div class="bento-card search-card expand-card" data-expand="search" tabindex="0" role="button" aria-expanded="false">
       <div class="card-inner">
         <div class="card-front agents-front">
           <span class="expand-hint" aria-hidden="true"></span>
@@ -71,18 +71,18 @@ const singleClients = [...videoWorks, ...audioWorks];
 
         </div>
         <div class="card-back">
-          <button class="expand-close" aria-label="Flip back">&larr;</button>
+          <button class="expand-close" aria-label="Close details">&larr;</button>
           <div class="back-content split-layout wide-content">
             <div class="split-col">
               <span class="back-badge agents-accent">2023 &ndash; Present</span>
-              <h3 class="back-company">Kaiba Digital</h3>
+              <p class="back-company">Kaiba Digital</p>
               <p class="back-role">AI System Designer</p>
               <span class="back-meta">Mexico</span>
               <div class="back-divider"></div>
               <p class="back-desc" style="margin-top: auto;">AI-assisted production pipelines, brand systems, and content workflows. Local LLM deployments and automation tooling for creative teams.</p>
             </div>
             <div class="split-col">
-              <h3 class="back-company">Tech Stack</h3>
+              <p class="back-company">Tech Stack</p>
               <p class="back-role">Local &amp; Cloud LLM Tooling</p>
               <div class="back-divider"></div>
               <div class="back-tags">
@@ -101,7 +101,7 @@ const singleClients = [...videoWorks, ...audioWorks];
     <!-- ================================================ -->
     <!-- BRIEFS — Client Token Access Form                -->
     <!-- ================================================ -->
-    <div class="bento-card portfolios-card expand-card" data-expand="portfolios">
+    <div class="bento-card portfolios-card expand-card" data-expand="portfolios" tabindex="0" role="button" aria-expanded="false">
       <div class="card-inner">
         <div class="card-front brand-front">
           <span class="expand-hint" aria-hidden="true"></span>
@@ -109,27 +109,23 @@ const singleClients = [...videoWorks, ...audioWorks];
 
         </div>
         <div class="card-back">
-          <button class="expand-close" aria-label="Flip back">&larr;</button>
+          <button class="expand-close" aria-label="Close details">&larr;</button>
           <div class="back-content compact centered" style="text-align: center; justify-content: center; align-items: center;">
-            <h3 class="back-company" style="margin-bottom: 1.5cqw; font-size: 5cqw;">Client Access</h3>
+            <p class="back-company" style="margin-bottom: 1.5cqw; font-size: 5cqw;">Client Access</p>
             <p class="back-desc" style="margin-bottom: 4cqw; font-size: 2.2cqw; color: #aaa;">Enter your unique token to securely view your project brief.</p>
             
             <form class="token-form" style="display: flex; flex-direction: column; gap: 2cqw; width: 100%; max-width: 300px; align-items: center;">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 class="brief-token-input"
-                placeholder="Enter token..." 
-                required 
-                style="width: 100%; padding: 2.5cqw; border-radius: 1.5cqw; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; font-size: 2.8cqw; outline: none; text-align: center; font-family: 'Avenir Next', sans-serif; box-sizing: border-box;"
+                placeholder="Enter token..."
+                required
+                aria-label="Brief access token"
+                autocomplete="off"
+                autocapitalize="none"
+                spellcheck="false"
               />
-              <button 
-                type="submit" 
-                style="padding: 2cqw 5cqw; background: #FF4B2B; color: #fff; border: none; border-radius: 1.2cqw; font-size: 2.5cqw; font-weight: 700; cursor: pointer; transition: transform 0.2s, filter 0.2s; font-family: 'Avenir Next', sans-serif;"
-                onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'"
-                onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'"
-              >
-                Access Brief
-              </button>
+              <button type="submit" class="token-submit">Access Brief</button>
             </form>
           </div>
         </div>
@@ -139,7 +135,7 @@ const singleClients = [...videoWorks, ...audioWorks];
     <!-- ================================================ -->
     <!-- design is my passion — Sound & Creative          -->
     <!-- ================================================ -->
-    <div class="bento-card guild-card expand-card" data-expand="guild">
+    <div class="bento-card guild-card expand-card" data-expand="guild" tabindex="0" role="button" aria-expanded="false">
       <div class="card-inner">
         <div class="card-front design-front">
           <span class="expand-hint" aria-hidden="true"></span>
@@ -147,9 +143,9 @@ const singleClients = [...videoWorks, ...audioWorks];
 
         </div>
         <div class="card-back">
-          <button class="expand-close" aria-label="Flip back">&larr;</button>
+          <button class="expand-close" aria-label="Close details">&larr;</button>
           <div class="back-content compact centered">
-            <h3 class="back-company" style="color: #666;">More Coming Soon</h3>
+            <p class="back-company back-soon">More Coming Soon</p>
           </div>
         </div>
       </div>
@@ -165,7 +161,7 @@ const singleClients = [...videoWorks, ...audioWorks];
     <!-- ================================================ -->
     <!-- EDITOR — Video Editing Clients                   -->
     <!-- ================================================ -->
-    <div class="bento-card dashboard-card expand-card" data-expand="dashboard">
+    <div class="bento-card dashboard-card expand-card" data-expand="dashboard" tabindex="0" role="button" aria-expanded="false">
       <div class="card-inner">
         <div class="card-front editor-front">
           <span class="expand-hint" aria-hidden="true"></span>
@@ -173,14 +169,14 @@ const singleClients = [...videoWorks, ...audioWorks];
 
         </div>
         <div class="card-back">
-          <button class="expand-close" aria-label="Flip back">&larr;</button>
+          <button class="expand-close" aria-label="Close details">&larr;</button>
           <div class="back-content editor-back">
 
             <!-- ── LIST VIEW ────────────────────────────────── -->
             <div class="works-view" data-view="list">
               <div class="works-columns">
                 <div class="split-col">
-                  <h3 class="back-company">Video Works</h3>
+                  <h2 class="back-company">Video Works</h2>
                   <div class="client-list tight">
                     {videoWorks.map((c) => (
                       <button type="button" class="client-entry client-btn" data-open={c.id}>
@@ -189,15 +185,16 @@ const singleClients = [...videoWorks, ...audioWorks];
                           : <Icon name="chevron" class="entry-chevron" />}
                         <span class="entry-info">
                           <strong>{c.name}</strong>
+                          {c.nda && <span class="sr-only">NDA protected</span>}
                           <span class="entry-meta">{c.meta}</span>
                         </span>
-                        <span class="entry-status active" style={`background:${c.color}`}></span>
+                        <span class="entry-status active" aria-hidden="true" style={`background:${c.color}`}></span>
                       </button>
                     ))}
                   </div>
                 </div>
                 <div class="split-col">
-                  <h3 class="back-company">Audio Works</h3>
+                  <h2 class="back-company">Audio Works</h2>
                   <div class="client-list tight">
                     {audioWorks.map((c) => (
                       <button type="button" class="client-entry client-btn" data-open={c.id}>
@@ -206,7 +203,7 @@ const singleClients = [...videoWorks, ...audioWorks];
                           <strong>{c.name}</strong>
                           <span class="entry-meta">{c.meta}</span>
                         </span>
-                        <span class="entry-status active" style={`background:${c.color}`}></span>
+                        <span class="entry-status active" aria-hidden="true" style={`background:${c.color}`}></span>
                       </button>
                     ))}
                   </div>
@@ -231,7 +228,7 @@ const singleClients = [...videoWorks, ...audioWorks];
             {singleClients.map((c) => (
               <div class="works-view works-detail" data-detail={c.id} hidden>
                 <button type="button" class="works-back"><Icon name="back" class="back-ico" />Works</button>
-                <h3 class="back-company detail-title">{c.name}</h3>
+                <h2 class="back-company detail-title" tabindex="-1">{c.name}</h2>
                 <span class="entry-meta detail-meta">{c.meta}</span>
                 {c.nda
                   ? (
@@ -247,12 +244,12 @@ const singleClients = [...videoWorks, ...audioWorks];
 
             <!-- ── DETAIL VIEW — Dai Blue (both groups) ────── -->
             <div class="works-view works-detail" data-detail={daiBlue.id} hidden>
-              <button type="button" class="works-back">&larr; Works</button>
-              <h3 class="back-company detail-title">{daiBlue.name}</h3>
+              <button type="button" class="works-back"><Icon name="back" class="back-ico" />Works</button>
+              <h2 class="back-company detail-title" tabindex="-1">{daiBlue.name}</h2>
               <span class="entry-meta detail-meta">{daiBlue.meta}</span>
-              <h4 class="work-group-label" style="color:#00B4DB">Video</h4>
+              <h3 class="work-group-label" style="color:#00B4DB">Video</h3>
               <WorkList works={daiBlue.video} />
-              <h4 class="work-group-label" style="color:#00D287">Audio</h4>
+              <h3 class="work-group-label" style="color:#00D287">Audio</h3>
               <WorkList works={daiBlue.audio} />
             </div>
 
@@ -267,7 +264,10 @@ const singleClients = [...videoWorks, ...audioWorks];
     <div class="bento-card resources-card" id="head-card">
       <div class="card-inner">
         <div class="card-front contact-front" style="overflow: hidden; border-radius: inherit;">
-          <canvas id="head-canvas" style="width: 100%; height: 100%; display: block; outline: none;"></canvas>
+          <div class="head-poster" aria-hidden="true">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 16a17 17 0 1 1 0 34 17 17 0 0 1 0-34zM16 90c0-19 15-32 34-32s34 13 34 32z" /></svg>
+          </div>
+          <canvas id="head-canvas" role="img" aria-label="3D sculpted head of Pablo Michel" style="width: 100%; height: 100%; display: block; outline: none;"></canvas>
         </div>
       </div>
     </div>
@@ -275,7 +275,7 @@ const singleClients = [...videoWorks, ...audioWorks];
     <!-- ================================================ -->
     <!-- Subtitle — Education & Languages                 -->
     <!-- ================================================ -->
-    <div class="bento-card gradient-card expand-card" data-expand="gradient">
+    <div class="bento-card gradient-card expand-card" data-expand="gradient" tabindex="0" role="button" aria-expanded="false">
       <div class="card-inner">
         <div class="card-front subtitle-front">
           <span class="expand-hint" aria-hidden="true"></span>
@@ -283,9 +283,9 @@ const singleClients = [...videoWorks, ...audioWorks];
 
         </div>
         <div class="card-back">
-          <button class="expand-close" aria-label="Flip back">&larr;</button>
+          <button class="expand-close" aria-label="Close details">&larr;</button>
           <div class="back-content compact centered">
-            <h3 class="back-company" style="color: #666;">More Coming Soon</h3>
+            <p class="back-company back-soon">More Coming Soon</p>
           </div>
         </div>
       </div>
@@ -294,53 +294,55 @@ const singleClients = [...videoWorks, ...audioWorks];
     <!-- ================================================ -->
     <!-- Bio — Skills                                     -->
     <!-- ================================================ -->
-    <div class="bento-card explore-card expand-card" data-expand="explore">
+    <div class="bento-card explore-card expand-card" data-expand="explore" tabindex="0" role="button" aria-expanded="false">
       <div class="card-inner">
         <div class="card-front bio-front">
           <span class="expand-hint" aria-hidden="true"></span>
           <div class="bio-text">
             <p><strong>Post-production generalist</strong> and <strong>creative technologist</strong>.</p>
-            <p>Working with LATAM and international clients across long-form, short-form vertical, branded, and live workflows.</p>
+            <p>Working out of Mexico with LATAM and international clients across long-form, short-form vertical, branded, and live workflows.</p>
             <p class="italic">Editing, color, sound, motion, and AI-assisted workflows.</p>
           </div>
         </div>
         <div class="card-back">
-          <button class="expand-close" aria-label="Flip back">&larr;</button>
+          <button class="expand-close" aria-label="Close details">&larr;</button>
           <div class="back-content bio-expanded">
-            <h3 class="back-company">Skills</h3>
+            <h2 class="back-company">Skills</h2>
             <div class="skills-grid-mobile">
               <div class="skill-group">
-                <h4 class="skill-cat">Video &amp; Motion</h4>
+                <h3 class="skill-cat">Video &amp; Motion</h3>
                 <div class="skill-icons">
-                  <span class="icon-wrap" data-tooltip="Adobe Creative Suite"><img src="https://cdn.simpleicons.org/adobecreativecloud" alt="Adobe Creative Suite" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="Premiere Pro"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg" alt="Premiere Pro" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="After Effects"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/aftereffects/aftereffects-original.svg" alt="After Effects" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="DaVinci Resolve"><img src="https://cdn.simpleicons.org/davinciresolve" alt="DaVinci Resolve" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="Fusion"><img src="https://cdn.simpleicons.org/blackmagicdesign" alt="Fusion" onerror="this.style.display='none';" class="skill-icon" /></span>
+                  <span class="icon-wrap" data-tooltip="Adobe Creative Suite"><img src="https://cdn.simpleicons.org/adobecreativecloud" alt="Adobe Creative Suite" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Premiere Pro"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg" alt="Premiere Pro" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="After Effects"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/aftereffects/aftereffects-original.svg" alt="After Effects" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="DaVinci Resolve"><img src="https://cdn.simpleicons.org/davinciresolve" alt="DaVinci Resolve" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Fusion"><img src="https://cdn.simpleicons.org/blackmagicdesign" alt="Fusion" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Blender"><img src="https://cdn.simpleicons.org/blender" alt="Blender" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
                 </div>
               </div>
               <div class="skill-group">
-                <h4 class="skill-cat">Design</h4>
+                <h3 class="skill-cat">Design</h3>
                 <div class="skill-icons">
-                  <span class="icon-wrap" data-tooltip="Figma"><img src="https://cdn.simpleicons.org/figma" alt="Figma" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="Sketch"><img src="https://cdn.simpleicons.org/sketch" alt="Sketch" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="Adobe Illustrator"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/illustrator/illustrator-plain.svg" alt="Adobe Illustrator" onerror="this.style.display='none';" class="skill-icon" /></span>
+                  <span class="icon-wrap" data-tooltip="Figma"><img src="https://cdn.simpleicons.org/figma" alt="Figma" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Sketch"><img src="https://cdn.simpleicons.org/sketch" alt="Sketch" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Adobe Illustrator"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/illustrator/illustrator-plain.svg" alt="Adobe Illustrator" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
                 </div>
               </div>
               <div class="skill-group">
-                <h4 class="skill-cat">Sound &amp; Audio</h4>
+                <h3 class="skill-cat">Sound &amp; Audio</h3>
                 <div class="skill-icons">
-                  <span class="icon-wrap" data-tooltip="FL Studio"><img src="/icons/flstudio.svg" alt="FL Studio" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="Protools"><img src="/icons/protools.svg" alt="Protools" onerror="this.style.display='none';" class="skill-icon" /></span>
+                  <span class="icon-wrap" data-tooltip="FL Studio"><img src="/icons/flstudio.svg" alt="FL Studio" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Pro Tools"><img src="/icons/protools.svg" alt="Pro Tools" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Ableton Live"><img src="https://cdn.simpleicons.org/abletonlive" alt="Ableton Live" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
                 </div>
               </div>
               <div class="skill-group">
-                <h4 class="skill-cat">AI &amp; Growth</h4>
+                <h3 class="skill-cat">AI &amp; Growth</h3>
                 <div class="skill-icons">
-                  <span class="icon-wrap" data-tooltip="Claude Code"><img src="https://cdn.simpleicons.org/anthropic" alt="Claude Code" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="Meta Ads"><img src="https://cdn.simpleicons.org/meta" alt="Meta Ads" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="Adsense benchmarking"><img src="https://cdn.simpleicons.org/googleadsense" alt="Adsense benchmarking" onerror="this.style.display='none';" class="skill-icon" /></span>
-                  <span class="icon-wrap" data-tooltip="Antigravity"><img src="/icons/antigravity.svg" alt="Antigravity" onerror="this.style.display='none';" class="skill-icon" /></span>
+                  <span class="icon-wrap" data-tooltip="Claude Code"><img src="https://cdn.simpleicons.org/anthropic" alt="Claude Code" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Meta Ads"><img src="https://cdn.simpleicons.org/meta" alt="Meta Ads" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="AdSense benchmarking"><img src="https://cdn.simpleicons.org/googleadsense" alt="AdSense benchmarking" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
+                  <span class="icon-wrap" data-tooltip="Antigravity"><img src="/icons/antigravity.svg" alt="Antigravity" onerror="this.style.display='none';" class="skill-icon" loading="lazy" decoding="async" /></span>
                 </div>
               </div>
             </div>
@@ -349,13 +351,13 @@ const singleClients = [...videoWorks, ...audioWorks];
 
             <div class="bio-bottom-row">
               <div class="bio-bottom-col">
-                <h3 class="back-company">Education</h3>
+                <h2 class="back-company">Education</h2>
                 <p class="back-role">B.A. Film Production</p>
                 <span class="back-meta" style="margin-top:0.5cqw;">CAAV &middot; 2018 &ndash; 2021</span>
                 <span class="back-meta">Mexico</span>
               </div>
               <div class="bio-bottom-col">
-                <h3 class="back-company">Languages</h3>
+                <h2 class="back-company">Languages</h2>
                 <div class="lang-row" style="flex-direction: column; gap: 0.8cqw; margin-top: 0.8cqw;">
                   <div class="lang-item">
                     <span class="lang-label">Spanish</span>
@@ -364,6 +366,10 @@ const singleClients = [...videoWorks, ...audioWorks];
                   <div class="lang-item">
                     <span class="lang-label">English</span>
                     <span class="lang-level">C1 Fluent</span>
+                  </div>
+                  <div class="lang-item">
+                    <span class="lang-label">Portuguese</span>
+                    <span class="lang-level">Written</span>
                   </div>
                 </div>
               </div>
@@ -380,6 +386,15 @@ const singleClients = [...videoWorks, ...audioWorks];
   const grid = document.querySelector('.bento-grid');
   const expandCards = document.querySelectorAll<HTMLElement>('.expand-card');
 
+  const collapse = (card: HTMLElement) => {
+    card.classList.remove('is-expanded');
+    card.setAttribute('aria-expanded', 'false');
+    if (grid) {
+      const name = card.getAttribute('data-expand');
+      if (name) grid.classList.remove('expand-' + name);
+    }
+  };
+
   expandCards.forEach(card => {
     card.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
@@ -388,30 +403,27 @@ const singleClients = [...videoWorks, ...audioWorks];
 
       // If this card is already expanded, close it (toggle)
       if (card.classList.contains('is-expanded')) {
-        card.classList.remove('is-expanded');
-        if (grid) {
-          const name = card.getAttribute('data-expand');
-          if (name) grid.classList.remove('expand-' + name);
-        }
+        collapse(card);
         return;
       }
 
       // First close all other expanded cards
-      expandCards.forEach(c => {
-        if (c !== card) {
-          c.classList.remove('is-expanded');
-          if (grid) {
-            const name = c.getAttribute('data-expand');
-            if (name) grid.classList.remove('expand-' + name);
-          }
-        }
-      });
+      expandCards.forEach(c => { if (c !== card) collapse(c); });
 
       // Expand this card
       card.classList.add('is-expanded');
+      card.setAttribute('aria-expanded', 'true');
       if (grid) {
         const name = card.getAttribute('data-expand');
         if (name) grid.classList.add('expand-' + name);
+      }
+    });
+
+    // Keyboard: Enter/Space toggles through the exact same click path
+    card.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target === card) {
+        e.preventDefault();
+        card.click();
       }
     });
   });
@@ -419,11 +431,10 @@ const singleClients = [...videoWorks, ...audioWorks];
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       expandCards.forEach(card => {
-        card.classList.remove('is-expanded');
-        if (grid) {
-          const name = card.getAttribute('data-expand');
-          if (name) grid.classList.remove('expand-' + name);
-        }
+        const wasExpanded = card.classList.contains('is-expanded');
+        collapse(card);
+        // Return focus to the card so keyboard users aren't dropped to <body>
+        if (wasExpanded) card.focus({ preventScroll: true });
       });
     }
   });
@@ -433,6 +444,7 @@ const singleClients = [...videoWorks, ...audioWorks];
   if (editorCard) {
     const listView = editorCard.querySelector<HTMLElement>('[data-view="list"]');
     const detailViews = editorCard.querySelectorAll<HTMLElement>('.works-detail');
+    let lastOpener: HTMLElement | null = null;
 
     const showList = () => {
       detailViews.forEach(d => { d.hidden = true; });
@@ -446,13 +458,19 @@ const singleClients = [...videoWorks, ...audioWorks];
     editorCard.querySelectorAll<HTMLElement>('.client-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        showDetail(btn.getAttribute('data-open'));
+        lastOpener = btn;
+        const id = btn.getAttribute('data-open');
+        showDetail(id);
+        // Announce the view change and keep focus in a sensible place
+        const title = editorCard.querySelector<HTMLElement>(`[data-detail="${id}"] .detail-title`);
+        if (title) title.focus({ preventScroll: true });
       });
     });
     editorCard.querySelectorAll<HTMLElement>('.works-back').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         showList();
+        if (lastOpener) lastOpener.focus({ preventScroll: true });
       });
     });
 
@@ -465,46 +483,51 @@ const singleClients = [...videoWorks, ...audioWorks];
 </script>
 
 <script>
-  import * as THREE from 'three';
-  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-  import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  // 3D head — three.js is imported lazily once the browser is idle so the
+  // library never blocks first paint. The flat poster silhouette covers the
+  // card until the model is ready, and stays if loading fails.
+  const headCanvas = document.getElementById('head-canvas') as HTMLCanvasElement | null;
 
-  const canvas = document.getElementById('head-canvas') as HTMLCanvasElement | null;
-  if (canvas) {
+  async function initHead(canvas: HTMLCanvasElement) {
+    const THREE = await import('three');
+    const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
+      import('three/addons/loaders/GLTFLoader.js'),
+      import('three/addons/loaders/DRACOLoader.js'),
+    ]);
+
+    const poster = canvas.parentElement?.querySelector('.head-poster');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mobileMq = window.matchMedia('(max-width: 768px)');
+
     const scene = new THREE.Scene();
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    
+
     // Set high-quality resolution
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    
+
     // Match Blender's Color Management system
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    // Adjust this in your renderer setup block
     renderer.toneMappingExposure = 1.4; // Boosted from 1.0 to brighten up everything safely
-    
+
     // Turn on the shadow engine
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
-    // ==========================================================
-    // 🛠️ BLENDER PERSPECTIVE CAMERA SETTINGS 🛠️
-    // Modify blenderFocalLength to match your Blender setup
-    // ==========================================================
-    let blenderFocalLength = 1000; // Change this to your exact Blender focal length
+
+    // Blender perspective camera settings — blenderFocalLength must match
+    // the Blender camera used to frame the model
+    const blenderFocalLength = 1000;
     const blenderSensorWidth = 36; // Blender's default "Full Frame" sensor width
-    
+
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
     camera.position.set(0, 0, 40); // Modify Z to push the camera in/out
     camera.lookAt(0, 0, 0);
 
-    function matchBlenderCamera(aspect) {
-      // 1. Calculate Blender's horizontal FOV in radians
+    function matchBlenderCamera(aspect: number) {
+      // Blender's horizontal FOV, converted to Three.js vertical FOV
       const horizontalFOV = 2 * Math.atan(blenderSensorWidth / (2 * blenderFocalLength));
-      // 2. Convert horizontal FOV to Three.js vertical FOV in degrees
       const verticalFOV = 2 * Math.atan(Math.tan(horizontalFOV / 2) / aspect) * (180 / Math.PI);
-      
+
       camera.fov = verticalFOV;
       camera.aspect = aspect;
       camera.updateProjectionMatrix();
@@ -515,30 +538,27 @@ const singleClients = [...videoWorks, ...audioWorks];
       if (!container) return;
       const width = container.clientWidth;
       const height = container.clientHeight;
-      
+
       if (width === 0 || height === 0) return;
-      
+
       // false so the canvas CSS width/height remains 100%
       renderer.setSize(width, height, false);
-      
+
       const aspect = width / height;
       matchBlenderCamera(aspect);
 
       // Prevent the head from touching the corners (Acts like object-fit: contain)
       if (headWrapper && headWrapper.userData.baseScale) {
-        // If the box is wider than it is tall, the fixed horizontal FOV will cause 
+        // If the box is wider than it is tall, the fixed horizontal FOV will cause
         // the head to expand and clip the top/bottom. We scale it down to compensate.
         const aspectAdjust = aspect > 1 ? (1 / aspect) : 1;
         // 0.8 acts as a safe padding margin so it never touches the edges
         headWrapper.scale.setScalar(headWrapper.userData.baseScale * aspectAdjust * 0.8);
       }
-      
+
       // Force an immediate render to prevent flickering/stretching during layout shifts
       renderer.render(scene, camera);
     };
-
-    // Remove OrbitControls entirely so we have manual control
-    // const controls = new OrbitControls(camera, renderer.domElement);
 
     // 1. Ambient Light to fill dark voids
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
@@ -546,7 +566,7 @@ const singleClients = [...videoWorks, ...audioWorks];
 
     // 2. Main Key Light (placed diagonally in front, above the head)
     const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    mainLight.position.set(5, 8, 5); 
+    mainLight.position.set(5, 8, 5);
     mainLight.castShadow = true;
 
     // 3. Fine-tune shadow quality
@@ -558,26 +578,27 @@ const singleClients = [...videoWorks, ...audioWorks];
     scene.add(mainLight);
 
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('https://unpkg.com/three@0.184.0/examples/jsm/libs/draco/gltf/');
+    // Decoder ships with the site (public/draco/) — no third-party request
+    dracoLoader.setDecoderPath('/draco/');
 
     const loader = new GLTFLoader();
     loader.setDRACOLoader(dracoLoader);
-    
+
     let headWrapper = new THREE.Group();
     scene.add(headWrapper);
 
     loader.load('/models/Head4.glb', (gltf) => {
       const model = gltf.scene;
-      
+
       // Traverse the 3D model data tree to enable shadows and tweak materials
       model.traverse((node) => {
           if (node.isMesh) {
-              node.castShadow = true;     
-              node.receiveShadow = true;  
-              
+              node.castShadow = true;
+              node.receiveShadow = true;
+
               // Force smooth shading across the face mesh
               node.geometry.computeVertexNormals();
-              
+
               // If skin looks too shiny, make it matte like Blender
               if (node.material) {
                   node.material.roughness = 0.7; // Make it matte like clay
@@ -585,25 +606,30 @@ const singleClients = [...videoWorks, ...audioWorks];
               }
           }
       });
-      
+
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
       const size = box.getSize(new THREE.Vector3());
-      
+
       const maxDim = Math.max(size.x, size.y, size.z);
       // Base scale (we use 1.4 as the baseline fitting size)
-      const baseScale = 1.4 / (maxDim || 1); 
+      const baseScale = 1.4 / (maxDim || 1);
       headWrapper.userData.baseScale = baseScale;
-      
+
       // Center the model properly
       model.position.x = -center.x;
       model.position.y = -center.y;
       model.position.z = -center.z;
-      
+
       headWrapper.add(model);
-      
+
+      // Model is live — fade the poster out
+      if (poster) poster.classList.add('is-hidden');
+
       // Force an immediate size update now that baseScale is known
-      updateSize(); 
+      updateSize();
+    }, undefined, () => {
+      // Load failed — leave the poster in place so the card never looks broken
     });
 
     // Initial call before model loads just to set canvas sizes
@@ -614,59 +640,76 @@ const singleClients = [...videoWorks, ...audioWorks];
       resizeObserver.observe(canvas.parentElement);
     }
 
-    // Look and snap logic (desktop only)
+    // Look-at targets (only used in desktop mode; touch devices don't fire mouseenter)
     let targetRotationX = 0;
     let targetRotationY = 0;
-    const isMobile = window.innerWidth <= 768;
-    
-    if (!isMobile) {
-      const cards = document.querySelectorAll('.bento-card');
-      cards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          if (card.id === 'head-card') {
-            targetRotationX = 0;
-            targetRotationY = 0;
-          } else {
-            const headRect = canvas.parentElement!.getBoundingClientRect();
-            const cardRect = card.getBoundingClientRect();
-            
-            const headCenterX = headRect.left + headRect.width / 2;
-            const headCenterY = headRect.top + headRect.height / 2;
-            
-            const cardCenterX = cardRect.left + cardRect.width / 2;
-            const cardCenterY = cardRect.top + cardRect.height / 2;
-            
-            const dx = cardCenterX - headCenterX;
-            const dy = cardCenterY - headCenterY;
-            
-            let rawY = (dx / window.innerWidth) * 1.2; 
-            let rawX = (dy / window.innerHeight) * 1.2;
-            
-            const maxTurn = 0.5;
-            targetRotationY = Math.max(-maxTurn, Math.min(maxTurn, rawY));
-            targetRotationX = Math.max(-maxTurn, Math.min(maxTurn, rawX));
-          }
-        });
-      });
-    }
 
-    const animate = () => {
+    document.querySelectorAll('.bento-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        if (card.id === 'head-card') {
+          targetRotationX = 0;
+          targetRotationY = 0;
+        } else {
+          const headRect = canvas.parentElement!.getBoundingClientRect();
+          const cardRect = card.getBoundingClientRect();
+
+          const headCenterX = headRect.left + headRect.width / 2;
+          const headCenterY = headRect.top + headRect.height / 2;
+
+          const cardCenterX = cardRect.left + cardRect.width / 2;
+          const cardCenterY = cardRect.top + cardRect.height / 2;
+
+          const dx = cardCenterX - headCenterX;
+          const dy = cardCenterY - headCenterY;
+
+          let rawY = (dx / window.innerWidth) * 1.2;
+          let rawX = (dy / window.innerHeight) * 1.2;
+
+          const maxTurn = 0.5;
+          targetRotationY = Math.max(-maxTurn, Math.min(maxTurn, rawY));
+          targetRotationX = Math.max(-maxTurn, Math.min(maxTurn, rawX));
+        }
+      });
+    });
+
+    let last = performance.now();
+    const animate = (now: number) => {
       requestAnimationFrame(animate);
-      
+
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+
+      // Skip rendering while the card is display:none (e.g. mobile expanded state)
+      if (canvas.getClientRects().length === 0) return;
+
       if (headWrapper) {
-        if (isMobile) {
-          // Slow continuous 360° spin on mobile
-          headWrapper.rotation.y += 0.005;
+        if (mobileMq.matches) {
+          // Slow continuous spin — 0.3 rad/s == the original 0.005/frame at
+          // 60fps, now identical on 120Hz screens. Paused for reduced motion.
+          if (!reduceMotion.matches) headWrapper.rotation.y += 0.3 * dt;
+        } else if (reduceMotion.matches) {
+          // Reduced motion: same look-at pose, without animated easing
+          headWrapper.rotation.x = targetRotationX;
+          headWrapper.rotation.y = targetRotationY;
         } else {
           // Smooth snap interpolation on desktop
           headWrapper.rotation.x += (targetRotationX - headWrapper.rotation.x) * 0.04;
           headWrapper.rotation.y += (targetRotationY - headWrapper.rotation.y) * 0.04;
         }
       }
-      
+
       renderer.render(scene, camera);
     };
-    animate();
+    requestAnimationFrame(animate);
+  }
+
+  if (headCanvas) {
+    const startHead = () => { initHead(headCanvas); };
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(startHead, { timeout: 1500 });
+    } else {
+      setTimeout(startHead, 200);
+    }
   }
 
   // Token Form Logic
@@ -674,8 +717,8 @@ const singleClients = [...videoWorks, ...audioWorks];
   if (tokenForm) {
     tokenForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const input = document.querySelector('.brief-token-input');
-      const token = input.value.trim().toLowerCase();
+      const input = document.querySelector<HTMLInputElement>('.brief-token-input');
+      const token = input ? input.value.trim().toLowerCase() : '';
       if (token) {
         window.location.href = `/briefs/${token}`;
       }

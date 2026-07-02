@@ -2,6 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import Stage from '../components/Stage.astro';
 import BentoGrid from '../components/BentoGrid.astro';
+
+// Static page — prerender at build time so Vercel serves it from the edge
+// instead of invoking a serverless function per request.
+export const prerender = true;
 ---
 <Layout>
   <Stage>

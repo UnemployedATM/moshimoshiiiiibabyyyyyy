@@ -45,16 +45,43 @@
   padding: 0;
 }
 
+:root {
+  color-scheme: dark;
+  /* Rich fallback chains so Windows/Android/Linux visitors get the closest
+     match instead of Times New Roman / default sans */
+  --font-sans: 'Avenir Next', 'Segoe UI', Roboto, Inter, system-ui, -apple-system, sans-serif;
+  --font-serif: 'Big Caslon', Didot, 'Bodoni MT', 'Playfair Display', Georgia, serif;
+}
+
 html,
 body {
   width: 100%;
   height: 100%;
   background: #000;
   color: #fff;
-  font-family: 'Avenir Next', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+}
+
+/* Keyboard-only focus ring — invisible for pointer users */
+:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 2px;
+}
+
+/* Visually hidden, screen-reader readable */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 body {
@@ -189,11 +216,6 @@ button {
   grid-template-rows: 2fr 2.5fr 5fr;
 }
 
-.bento-grid.expand-resources {
-  grid-template-columns: repeat(7, 1fr) repeat(2, 2.5fr) repeat(4, 1fr);
-  grid-template-rows: 2.5fr 2.5fr 5fr;
-}
-
 .bento-grid.expand-gradient {
   grid-template-columns: repeat(7, 1fr) repeat(6, 2fr);
   grid-template-rows: 4.5fr 2.5fr 2.5fr;
@@ -307,13 +329,18 @@ button {
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, 0.4);
-  transition: opacity 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  visibility: visible;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, visibility 0s linear 0s;
   z-index: 2;
 }
 
+/* visibility swaps after the fade so the hidden face leaves the tab order
+   and the accessibility tree — the animation itself is unchanged */
 .expand-card.is-expanded .card-front {
   opacity: 0;
   pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, visibility 0s linear 0.3s;
 }
 
 .agents-front {
@@ -383,7 +410,7 @@ button {
 
 .tab-label {
   font-weight: 700;
-  font-family: 'Avenir Next', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 2.5cqw;
   letter-spacing: 0.05em;
   z-index: 2;
@@ -398,7 +425,7 @@ button {
 }
 
 .subtitle {
-  font-family: 'Avenir Next', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 2.2cqw;
   max-width: 80%;
@@ -410,7 +437,7 @@ button {
 }
 
 .bio-text p {
-  font-size: 1.5cqw;
+  font-size: max(1.5cqw, 0.8rem);
   line-height: 1.4;
   margin-bottom: 1.1cqw;
   color: #ddd;
@@ -430,10 +457,11 @@ button {
   color: #fcfcfc;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 2cqw 8cqw rgba(0, 0, 0, 0.4);
-  font-family: 'Avenir Next', system-ui, sans-serif;
+  font-family: var(--font-sans);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0s linear 0.4s;
   z-index: 1;
   container-type: inline-size;
 }
@@ -441,6 +469,8 @@ button {
 .expand-card.is-expanded .card-back {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
+  transition: opacity 0.4s ease, visibility 0s linear 0s;
 }
 
 .back-content {
@@ -500,11 +530,6 @@ button {
   color: #1a1a2e;
 }
 
-.brand-accent {
-  background: #FF4B2B;
-  color: #fff;
-}
-
 .back-company {
   font-size: 5.5cqw;
   font-weight: 700;
@@ -530,8 +555,8 @@ button {
 }
 
 .back-meta {
-  font-size: 2.5cqw;
-  color: #888888;
+  font-size: max(2.5cqw, 0.75rem);
+  color: #999999;
   margin-bottom: 1.5cqw;
   display: block;
 }
@@ -554,10 +579,15 @@ button {
 }
 
 .back-desc {
-  font-size: 2.8cqw;
+  font-size: max(2.8cqw, 0.85rem);
   line-height: 1.55;
   color: #cccccc;
   margin-bottom: 2.5cqw;
+}
+
+/* Muted "coming soon" card backs — de-emphasized but AA-readable */
+.back-soon {
+  color: #9a9aa5;
 }
 
 .back-tags {
@@ -574,7 +604,7 @@ button {
 .back-tag {
   padding: 0.6cqw 1.8cqw;
   border-radius: 1cqw;
-  font-size: 2.2cqw;
+  font-size: max(2.2cqw, 0.7rem);
   font-weight: 500;
   background: rgba(255, 255, 255, 0.1);
   color: #eeeeee;
@@ -661,7 +691,7 @@ button {
 }
 
 .entry-meta {
-  font-size: 2.2cqw;
+  font-size: max(2.2cqw, 0.75rem);
   color: #888888;
   font-weight: 500;
   white-space: nowrap;
@@ -763,14 +793,23 @@ button {
 }
 
 /* Works detail view */
-.works-detail { overflow-y: auto; gap: 0.5cqw; }
+.works-detail {
+  overflow-y: auto;
+  gap: 0.5cqw;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.works-detail::-webkit-scrollbar { width: 6px; }
+.works-detail::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); border-radius: 3px; }
+.works-detail::-webkit-scrollbar-track { background: transparent; }
 
 .works-back {
   appearance: none;
   -webkit-appearance: none;
   align-self: flex-start;
   font-family: inherit;
-  font-size: 2.4cqw;
+  font-size: max(2.4cqw, 0.8rem);
   font-weight: 600;
   color: #cccccc;
   background: rgba(255, 255, 255, 0.06);
@@ -788,7 +827,8 @@ button {
 }
 
 .detail-title { font-size: 5cqw; margin-bottom: 0.4cqw; }
-.detail-meta { margin-bottom: 2cqw; }
+.detail-title:focus { outline: none; }
+.detail-meta { margin-bottom: 2cqw; color: #999999; }
 
 .work-group-label {
   font-size: 2.4cqw;
@@ -813,7 +853,7 @@ button {
   border-radius: 1.5cqw;
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 2.6cqw;
+  font-size: max(2.6cqw, 0.8rem);
   font-weight: 600;
   color: #ffffff;
   text-decoration: none;
@@ -829,7 +869,7 @@ button {
 .wl-arrow { color: #00D287; width: 2.8cqw; height: 2.8cqw; }
 
 .work-link.is-empty {
-  color: #777777;
+  color: #8a8a8a;
   font-weight: 500;
   cursor: default;
   border-style: dashed;
@@ -842,11 +882,11 @@ button {
 }
 
 .wl-tag {
-  font-size: 1.9cqw;
+  font-size: max(1.9cqw, 0.65rem);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #888;
+  color: #999999;
   background: rgba(255, 255, 255, 0.06);
   padding: 0.4cqw 1.4cqw;
   border-radius: 5cqw;
@@ -882,8 +922,8 @@ button {
 }
 
 .nda-lock { width: 7cqw; height: 7cqw; color: rgba(255, 255, 255, 0.55); }
-.nda-title { font-size: 3.2cqw; font-weight: 700; color: #ffffff; }
-.nda-desc { font-size: 2.4cqw; color: #999999; line-height: 1.5; max-width: 80%; }
+.nda-title { font-size: max(3.2cqw, 0.9rem); font-weight: 700; color: #ffffff; }
+.nda-desc { font-size: max(2.4cqw, 0.8rem); color: #999999; line-height: 1.5; max-width: 80%; }
 
 /* Embedded video work (16:9 responsive) */
 .work-media {
@@ -893,7 +933,7 @@ button {
 }
 
 .wm-label {
-  font-size: 2.4cqw;
+  font-size: max(2.4cqw, 0.8rem);
   font-weight: 600;
   color: #ffffff;
 }
@@ -929,53 +969,131 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.wa-label { font-size: 2.6cqw; font-weight: 600; color: #ffffff; }
-.work-audio audio { width: 100%; height: 3.4cqw; }
+.wa-label { font-size: max(2.6cqw, 0.8rem); font-weight: 600; color: #ffffff; }
+.work-audio audio { width: 100%; height: max(3.4cqw, 32px); }
+
+/* Click-to-load video facade — flat thumbnail + filled play badge */
+.yt-facade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: #000;
+  cursor: pointer;
+  display: block;
+}
+
+.yt-facade img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.85;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.yt-facade:hover img,
+.yt-facade:focus-visible img {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
+.yt-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max(8cqw, 44px);
+  height: max(8cqw, 44px);
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 22%;
+  color: #ffffff;
+  pointer-events: none;
+  transition: background 0.2s ease;
+}
+
+.yt-facade:hover .yt-play {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.yt-play-ico {
+  width: 55%;
+  height: 55%;
+}
 
 /* ============================================================
-   Contact card back
+   Brief token form (BRIEFS card back)
    ============================================================ */
 
-.contact-link {
-  display: block;
-  font-size: 3cqw;
-  color: #ffffff;
-  text-decoration: none;
-  margin-bottom: 1.5cqw;
-  transition: color 0.2s;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  white-space: nowrap;
+.brief-token-input {
+  width: 100%;
+  padding: 2.5cqw;
+  border-radius: 1.5cqw;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 2.8cqw;
+  text-align: center;
+  font-family: inherit;
 }
 
-.contact-link:hover {
-  color: #FF4B2B;
+.brief-token-input:focus-visible {
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-.contact-link.subtle {
-  font-weight: 400;
-  font-size: 1.15cqw;
-  color: #aaaaaa;
+.token-submit {
+  padding: 2cqw 5cqw;
+  background: #FF4B2B;
+  color: #fff;
+  border: none;
+  border-radius: 1.5cqw;
+  font-size: max(2.5cqw, 1.17rem);
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.2s, filter 0.2s;
 }
 
-.contact-link.subtle:hover {
-  color: #ffffff;
+.token-submit:hover,
+.token-submit:focus-visible {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.token-submit:active {
+  transform: scale(0.98);
+}
+
+/* ============================================================
+   3D head — flat poster shown until the model loads
+   ============================================================ */
+
+.head-poster {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hero .head-poster svg {
+  width: 45%;
+  height: 45%;
+  fill: rgba(0, 0, 0, 0.15);
+}
+
+.head-poster.is-hidden {
+  opacity: 0;
 }
 
 /* ============================================================
    Education / Languages — row layout
    ============================================================ */
-
-.back-section {
-  flex: 1;
-}
-
-.back-section-divider {
-  width: 1px;
-  align-self: stretch;
-  background: rgba(255, 255, 255, 0.1);
-  flex-shrink: 0;
-}
 
 .lang-row {
   display: flex;
@@ -989,26 +1107,19 @@ button {
 }
 
 .lang-label {
-  font-size: 3.2cqw;
+  font-size: max(3.2cqw, 0.8rem);
   font-weight: 600;
   color: #ffffff;
 }
 
 .lang-level {
-  font-size: 2.8cqw;
+  font-size: max(2.8cqw, 0.75rem);
   color: #aaaaaa;
 }
 
 /* ============================================================
    Skills grid (bio back)
    ============================================================ */
-
-.skills-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 3.5cqw;
-  margin-top: 1.5cqw;
-}
 
 /* Bio expanded layout — 2-column skills grid on desktop */
 .skills-grid-mobile {
@@ -1037,12 +1148,6 @@ button {
   font-weight: 700;
   margin-bottom: 0.8cqw;
   color: #ffffff;
-}
-
-.skill-tools {
-  font-size: 3.5cqw;
-  color: #bbbbbb;
-  line-height: 1.4;
 }
 
 .skill-icons {
@@ -1091,7 +1196,7 @@ button {
   transition: opacity 0.2s, transform 0.2s;
   box-shadow: 0 1cqw 2cqw rgba(0, 0, 0, 0.4);
   z-index: 100;
-  font-family: 'Avenir Next', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .icon-wrap:hover::after {
@@ -1107,8 +1212,13 @@ button {
   background: #1A1A24;
 }
 
+/* The title card keeps its hover lift but doesn't promise a click */
+.uipedia-card.interactive-card {
+  cursor: default;
+}
+
 .logo-title {
-  font-family: 'Avenir Next', sans-serif;
+  font-family: var(--font-sans);
   font-size: 5cqw;
   font-weight: 700;
   margin: 0;
@@ -1119,7 +1229,7 @@ button {
 }
 
 .logo-title .serif {
-  font-family: 'Big Caslon', serif;
+  font-family: var(--font-serif);
   font-weight: 500;
   color: #fff;
 }
@@ -1165,6 +1275,41 @@ button {
     transition: none !important;
     transform: none !important;
   }
+
+  /* Same end states, no animation: cards still expand/collapse and hover
+     styles still apply — instantly instead of eased */
+  .bento-grid,
+  .bento-card,
+  .card-front,
+  .card-back,
+  .tab-label,
+  .expand-hint,
+  .client-entry,
+  .entry-status,
+  .entry-chevron,
+  .work-link,
+  .works-back,
+  .expand-close,
+  .skill-icon,
+  .icon-wrap::after,
+  .token-submit,
+  .yt-facade img,
+  .head-poster {
+    transition: none !important;
+  }
+
+  .expand-card:not(.is-expanded):hover .tab-label,
+  .client-entry:hover,
+  .client-entry:hover .entry-status,
+  .client-btn:hover .entry-chevron,
+  .work-link:hover,
+  .skill-icon:hover,
+  .token-submit:hover,
+  .token-submit:focus-visible,
+  .yt-facade:hover img,
+  .yt-facade:focus-visible img {
+    transform: none !important;
+  }
 }
 
 /* ============================================================
@@ -1185,6 +1330,8 @@ button {
     padding-bottom: 15vw;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
   }
 
   /* Reset grid template expansion on mobile to maintain flow */
@@ -1396,19 +1543,7 @@ button {
     font-size: 3.5vw !important;
   }
 
-  /* Education entries */
-  .bento-grid[class*="expand-"] .edu-degree {
-    font-size: 4.5vw !important;
-  }
-  .bento-grid[class*="expand-"] .edu-school {
-    font-size: 3.8vw !important;
-  }
-  .bento-grid[class*="expand-"] .edu-year {
-    font-size: 3.5vw !important;
-  }
-
   /* Language entries */
-  .bento-grid[class*="expand-"] .lang-name,
   .bento-grid[class*="expand-"] .lang-label {
     font-size: 4.5vw !important;
     font-weight: 700 !important;
@@ -1417,11 +1552,80 @@ button {
     font-size: 3.5vw !important;
   }
 
-  /* Form inputs inside cards (Client Access) */
+  /* Form inputs inside cards (Client Access) — 16px floor stops iOS Safari
+     from zooming the fixed-stage layout when the input gets focus */
   .bento-grid[class*="expand-"] input,
   .bento-grid[class*="expand-"] button[type="submit"] {
-    font-size: 4vw !important;
+    font-size: max(16px, 4vw) !important;
     padding: 3vw !important;
+  }
+
+  /* Works views (EDITOR card): readable text + touch-sized targets */
+  .bento-grid[class*="expand-"] .works-back {
+    font-size: 4vw !important;
+    padding: 2.5vw 5vw !important;
+    min-height: 44px;
+  }
+  .bento-grid[class*="expand-"] .works-back .back-ico {
+    width: 4vw !important;
+    height: 4vw !important;
+    margin-right: 1.5vw !important;
+  }
+  .bento-grid[class*="expand-"] .work-link {
+    font-size: 4vw !important;
+    padding: 3vw 4vw !important;
+    min-height: 44px;
+  }
+  .bento-grid[class*="expand-"] .wl-tag {
+    font-size: 3vw !important;
+    padding: 1vw 3vw !important;
+  }
+  .bento-grid[class*="expand-"] .wl-arrow {
+    width: 4vw !important;
+    height: 4vw !important;
+  }
+  .bento-grid[class*="expand-"] .wm-label,
+  .bento-grid[class*="expand-"] .work-group-label {
+    font-size: 3.8vw !important;
+  }
+  .bento-grid[class*="expand-"] .detail-title {
+    font-size: 7vw !important;
+  }
+  .bento-grid[class*="expand-"] .detail-meta {
+    font-size: 3.8vw !important;
+  }
+  .bento-grid[class*="expand-"] .nda-title {
+    font-size: 4.5vw !important;
+  }
+  .bento-grid[class*="expand-"] .nda-desc {
+    font-size: 3.8vw !important;
+  }
+  .bento-grid[class*="expand-"] .entry-chevron,
+  .bento-grid[class*="expand-"] .entry-lock {
+    width: 4.5vw !important;
+    height: 4.5vw !important;
+  }
+  .bento-grid[class*="expand-"] .nda-lock {
+    width: 10vw !important;
+    height: 10vw !important;
+  }
+
+  /* The comic label keeps its understated styling at mobile scale */
+  .tab-label.is-comic {
+    font-size: 4.5vw;
+    font-weight: 400;
+    letter-spacing: 0;
+    white-space: normal;
+    max-width: 90%;
+  }
+
+  /* Expansion affordance dot: actually visible at touch sizes (hover doesn't exist) */
+  .expand-hint {
+    width: max(1.6vw, 6px);
+    height: max(1.6vw, 6px);
+    bottom: 2.5vw;
+    right: 2.5vw;
+    opacity: 0.45;
   }
 
   /* Bio card: skills grid stacks to 1 column on mobile */
@@ -1455,7 +1659,7 @@ button {
   .bio-text { font-size: 1.5vw; }
   .expand-close { width: 3vw; height: 3vw; font-size: 2.2vw; top: 0.8vw; right: 0.8vw; }
   .logo-title { font-size: 5.5vw; margin-bottom: 1vw; }
-  .back-company { font-size: 2.5vw; }
-  .back-role { font-size: 3.8vw; }
-  .back-date { font-size: 1.2vw; }
+  /* Preserve the cqw hierarchy: company heading larger than the role line */
+  .back-company { font-size: 3.4vw; }
+  .back-role { font-size: 1.9vw; }
 }

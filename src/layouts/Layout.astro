@@ -3,17 +3,59 @@ import '../styles/global.css';
 
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = '/Pablo Michel — Portfolio' } = Astro.props;
+const {
+  title = 'Pablo Michel — Post-Production Generalist & Creative Technologist',
+  description = 'Pablo Michel — post-production generalist and creative technologist working out of Mexico. Editing, color, sound, motion and AI-assisted workflows for LATAM and international clients.',
+} = Astro.props;
+
+const site = 'https://pablojmichel.com';
+const canonical = new URL(Astro.url.pathname, site).href;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Pablo Michel',
+  url: site,
+  jobTitle: 'Post-Production Generalist & Creative Technologist',
+  worksFor: { '@type': 'Organization', name: 'Kaiba Digital' },
+  address: { '@type': 'PostalAddress', addressCountry: 'MX' },
+  alumniOf: 'CAAV',
+  knowsLanguage: ['es', 'en', 'pt'],
+};
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content="Pablo Michel — Interfaces, and the intelligence within." />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pablo Michel" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site}/og.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${site}/og.png`} />
+
+    <link rel="preconnect" href="https://i.ytimg.com" />
+    <link rel="dns-prefetch" href="https://cdn.simpleicons.org" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
   </head>
   <body>
     <slot />
