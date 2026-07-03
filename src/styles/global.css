@@ -202,8 +202,8 @@ button {
 }
 
 .bento-grid.expand-portfolios {
-  grid-template-columns: repeat(3, 1.6fr) repeat(10, 1fr);
-  grid-template-rows: 2fr 3.5fr 4fr;
+  grid-template-columns: repeat(3, 1fr) repeat(4, 2.8fr) repeat(6, 1fr);
+  grid-template-rows: 2fr 2.5fr 5fr;
 }
 
 .bento-grid.expand-guild {
@@ -212,8 +212,8 @@ button {
 }
 
 .bento-grid.expand-search {
-  grid-template-columns: repeat(3, 1fr) repeat(4, 2.8fr) repeat(6, 1fr);
-  grid-template-rows: 2fr 2.5fr 5fr;
+  grid-template-columns: repeat(3, 1.6fr) repeat(10, 1fr);
+  grid-template-rows: 2fr 3.5fr 4fr;
 }
 
 .bento-grid.expand-gradient {
@@ -227,12 +227,12 @@ button {
 }
 
 .search-card {
-  grid-column: 4 / 8;
+  grid-column: 1 / 4;
   grid-row: 3 / 4;
 }
 
 .portfolios-card {
-  grid-column: 1 / 4;
+  grid-column: 4 / 8;
   grid-row: 3 / 4;
 }
 
@@ -1367,10 +1367,10 @@ button {
   
   .resources-card { order: 2; grid-column: span 1; grid-row: span 1; } /* Yellow (Head) */
   .explore-card { order: 3; grid-column: span 2; grid-row: span 2; } /* Dark Gray (Bio) */
-  .portfolios-card { order: 4; grid-column: span 1; grid-row: span 1; } /* Orange (Briefs) */
-  
+  .search-card { order: 4; grid-column: span 1; grid-row: span 1; } /* Purple (AGENTS) */
+
   .dashboard-card { order: 5; grid-column: span 2; grid-row: span 1; } /* Cyan (EDITOR) */
-  .search-card { order: 6; grid-column: span 1; grid-row: span 1; } /* Purple (AGENTS) */
+  .portfolios-card { order: 6; grid-column: span 1; grid-row: span 1; } /* Orange (Briefs) */
   
   .guild-card { order: 7; grid-column: span 1; grid-row: span 1; } /* Green (Design) */
   .gradient-card { order: 8; grid-column: span 2; grid-row: span 1; } /* Pink (Interfaces) */
