@@ -344,13 +344,13 @@ button {
 }
 
 .agents-front {
-  background: #C89BFF;
-  color: #111;
+  background: #FF4B2B;
+  color: #fff;
 }
 
 .brand-front {
-  background: #FF4B2B;
-  color: #fff;
+  background: #C89BFF;
+  color: #111;
 }
 
 .design-front {
@@ -526,7 +526,7 @@ button {
 }
 
 .agents-accent {
-  background: #C89BFF;
+  background: #FF4B2B;
   color: #1a1a2e;
 }
 
@@ -1047,8 +1047,8 @@ button {
 
 .token-submit {
   padding: 2cqw 5cqw;
-  background: #FF4B2B;
-  color: #fff;
+  background: #C89BFF;
+  color: #111;
   border: none;
   border-radius: 1.5cqw;
   font-size: max(2.5cqw, 1.17rem);
