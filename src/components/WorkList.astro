@@ -40,7 +40,7 @@ function videoInfo(url: string) {
                 </button>
               : v.kind === 'iframe'
                 ? <iframe src={v.embed} loading="lazy" title={w.label} allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-                : <video src={v.embed} controls preload="metadata"></video>}
+                : <video src={v.embed} controls preload="metadata" playsinline poster={w.poster}></video>}
           </div>
         </div>
       );
